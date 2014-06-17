@@ -1,0 +1,27 @@
+[include]
+  path = .gitconfig.local
+[user]
+	name = maasa
+	email = maasa.giss2@gmail.com
+[core]
+	editor = vim -c \"set fenc=utf-8\"
+	whitespace = cr-at-eol
+  excludesfile = ~/.gitignore_global  # globalな.gitignoreの指定
+[color]
+	ui = true
+[alias]
+	graph = log --graph --date-order --all --pretty=format:'%h %Cred%d %Cgreen%ad %Cblue%cn %Creset%s' --date=short
+  s = status
+  a = add
+  c = commit
+	cm = commit -m
+  cam = commit -am
+	co = checkout
+	p = push
+	b = branch
+[push]
+  default = tracking       # defaultのpush先はtrackingしているリポジトリ
+[pager]
+  log = diff-highlight | LESS=-R less
+  show = diff-highlight | LESS=-R less
+  diff = diff-highlight | LESS=-R less
