@@ -640,6 +640,15 @@ call smartinput#define_rule({
 " end自動挿入
 call smartinput_endwise#define_default_rules()
 
+" coffee |) で改行したら->を自動で入れる
+call smartinput#map_to_trigger('i', '<CR>', '<CR>', '<CR>')
+call smartinput#define_rule({
+            \   'at' : '\%#)',
+            \   'char' : '<CR>',
+            \   'input' : '<Esc><S-a><Space>-><CR>',
+            \   'filetype' : ['coffee'],
+            \    })
+
 " smartchr
 " inoremap <buffer> <expr> = smartchr#loop(' = ', ' == ', '=')
 " inoremap <buffer> <expr> <S-=> smartchr#loop(' + ', '+')
