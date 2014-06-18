@@ -163,7 +163,7 @@ alias mv='mv -i'
 alias mkdir='mkdir -p'
 
 # git
-alias gs='git status'
+alias g='git'
 
 # bundle
 alias bi='bundle install'
