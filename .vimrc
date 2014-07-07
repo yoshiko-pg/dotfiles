@@ -192,6 +192,10 @@ nnoremap <Esc><Esc> :noh<CR>
 " 開いたファイルのディレクトリに移動
 au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
+" <Space>:で文末に;
+nnoremap <Space>: A;<Esc>
+
+
 "-------------------------------------------------------------------------------"
 " function
 "-------------------------------------------------------------------------------"
@@ -261,6 +265,14 @@ nnoremap <Space>w :w<CR>
 " ペースト
 inoremap <C-v> <Esc>p<S-a>
 
+
+"-------------------------------------------------------------------------------"
+" template
+"-------------------------------------------------------------------------------"
+autocmd BufNewFile *.html 0r ~/.vim/templates/template.html
+autocmd BufNewFile *.php 0r ~/.vim/templates/template.php
+
+
 "-------------------------------------------------------------------------------"
 " Plugin
 "-------------------------------------------------------------------------------"
@@ -302,6 +314,7 @@ NeoBundle 'scrooloose/syntastic'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-textobj-indent'
 NeoBundle 'cohama/vim-smartinput-endwise'
+NeoBundle 'vim-scripts/closetag.vim'
 
 " その他拡張
 NeoBundle 'kana/vim-submode'
@@ -547,7 +560,7 @@ call smartinput#define_rule({
             \   'at'       : '\%#',
             \   'char'     : '#',
             \   'input'    : '#{}<Left>',
-            \   'filetype' : ['ruby', 'eruby', 'spec', 'slim', 'coffee'],
+            \   'filetype' : ['ruby', 'eruby', 'spec', 'slim'],
             \   'syntax'   : ['Constant', 'Special'],
             \   })
 
@@ -602,6 +615,14 @@ call smartinput#define_rule(
     \ , 'input' : '<BS>~ '
     \ })
 
+" でも連続した => となる場合には空白は挟まない
+call smartinput#map_to_trigger('i', '>', '>', '>')
+call smartinput#define_rule(
+    \ { 'at'    : '=\s\%#'
+    \ , 'char'  : '>'
+    \ , 'input' : '<BS>> '
+    \ })
+
 " erb <%  %>
 call smartinput#map_to_trigger('i', '%', '%', '%')
 call smartinput#define_rule({
@@ -621,6 +642,15 @@ call smartinput#define_rule({
             \   'char'  : '=',
             \   'input' : '=<Space><Space><Left>',
             \   'filetype' : ['eruby'],
+            \   })
+
+" twig {%  %}
+call smartinput#map_to_trigger('i', '%', '%', '%')
+call smartinput#define_rule({
+            \   'at'    : '{\%#',
+            \   'char'  : '%',
+            \   'input' : '%  %<Left><Left>',
+            \   'filetype' : ['twig'],
             \   })
 
 " {}の展開
@@ -676,7 +706,7 @@ let g:syntastic_javascript_checker = 'jshint' "jshintを使う
 let g:syntastic_mode_map = {
       \ 'mode': 'active',
       \ 'active_filetypes': ['ruby', 'javascript'],
-      \ 'passive_filetypes': []
+      \ 'passive_filetypes': ['html']
       \ }
 "エラー表示マークを変更
 let g:syntastic_enable_signs=1
@@ -702,3 +732,6 @@ nnoremap [fugitive]b  :<C-u>Gbrowse<CR>
 
 " matchit
 runtime macros/matchit.vim
+
+" closetag.vim
+:let g:closetag_html_style=1
