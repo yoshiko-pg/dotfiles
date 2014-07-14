@@ -54,6 +54,8 @@ PROMPT=$'
 %F{yellow}[%~]%f `vcs_echo`
 %(?.${DEFAULT}.${ERROR}) '
 
+# もしかして
+SPROMPT="%{$fg[blue]%}もしかして: %B%r%b ${reset_color}  (y, n, a, e)-> "
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
