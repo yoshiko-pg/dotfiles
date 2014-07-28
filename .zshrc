@@ -166,6 +166,7 @@ alias mkdir='mkdir -p'
 
 # git
 alias g='git'
+alias gitrmall='git rm $(git ls-files --deleted)'
 
 # bundle
 alias bi='bundle install'
