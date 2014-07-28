@@ -22,10 +22,10 @@ set notimeout ttimeout ttimeoutlen=200 " キーコードはすぐtimeout、マ�
 " インデント設定
 set cindent
 set autoindent
-set shiftwidth=2 " 自動インデントの空白の数
+set shiftwidth=4 " 自動インデントの空白の数
 set expandtab
 set smarttab  " 行頭にTabでshiftwidth分インデントする
-set tabstop=2  " 画面上のTab幅
+set tabstop=4  " 画面上のTab幅
 set shiftround " インデントをshiftwidthの幅に丸める
 
 " エンコーディング関連
