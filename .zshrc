@@ -184,6 +184,7 @@ alias site='cd ~/Dropbox/site/;'
 alias sand='cd ~/Dropbox/site/sandbox/;'
 alias gh='cd ~/Dropbox/site/github/;'
 alias blog='cd ~/Dropbox/other/blog/;'
+alias pj='cd ~/Company/project;'
 
 # 現在のディレクトリで新しいタブ
 alias t='~/Dropbox/app/script/createTabAtCurrentDir.applescript'
