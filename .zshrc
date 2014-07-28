@@ -226,3 +226,7 @@ PATH="/Applications/Postgres.app/Contents/Versions/9.3/bin:$PATH"
 
 # rails
 export RAILS_ENV=development
+
+# Android
+export PATH="/Applications/eclipse/sdk/tools:$PATH"
+export PATH="/Applications/eclipse/sdk/platform-tools:$PATH"
