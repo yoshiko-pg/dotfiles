@@ -154,15 +154,10 @@ bindkey "^K" history-beginning-search-forward
 ########################################
 # エイリアス
 
-alias la='ls -a'
-alias ll='ls -l'
-alias lla='ls -la'
+alias ls='ls -la'
 
-alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
-
-alias mkdir='mkdir -p'
 
 # git
 alias g='git'
@@ -181,7 +176,7 @@ alias sudo='sudo '
 alias d='cd ~/Dropbox;'
 alias dt='cd ~/Desktop;'
 alias site='cd ~/Dropbox/site/;'
-alias sand='cd ~/Dropbox/site/sandbox/;'
+alias sand='cd ~/local/sandbox/;'
 alias gh='cd ~/Dropbox/site/github/;'
 alias blog='cd ~/Dropbox/other/blog/;'
 alias pj='cd ~/Company/project;'

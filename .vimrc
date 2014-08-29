@@ -195,6 +195,9 @@ au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 " <Space>:で文末に;
 nnoremap <Space>: A;<Esc>
 
+" C-gでフルパスを表示
+nnoremap <C-g> 1<C-g>
+
 
 "-------------------------------------------------------------------------------"
 " function
@@ -343,6 +346,7 @@ NeoBundle 'slim-template/vim-slim'
 " css系
 NeoBundle 'AtsushiM/sass-compile.vim'
 NeoBundle 'hail2u/vim-css3-syntax'
+NeoBundle 'lilydjwg/colorizer'
 
 " javascript系
 NeoBundle 'jelera/vim-javascript-syntax'
@@ -702,7 +706,7 @@ let g:syntastic_loc_list_height=6 "エラー表示ウィンドウの高さ
 set statusline+=%#warningmsg# "エラーメッセージの書式
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-let g:syntastic_javascript_checker = 'jshint' "jshintを使う
+let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_mode_map = {
       \ 'mode': 'active',
       \ 'active_filetypes': ['ruby', 'javascript'],
