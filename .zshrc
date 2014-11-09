@@ -9,6 +9,7 @@ eval $(/usr/local/bin/gdircolors ~/Dropbox/app/Terminal/solarized/dircolors-sola
 export LSCOLORS=ExFxBxDxCxegedabagacad
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 alias ls='/usr/local/bin/gls --color=auto'
+alias diff='colordiff -u'
 
 # ヒストリの設定
 HISTFILE=~/.zsh_history
@@ -161,6 +162,7 @@ alias mv='mv -i'
 
 # git
 alias g='git'
+alias gits='git status'
 alias gitrmall='git rm $(git ls-files --deleted)'
 
 # bundle
@@ -168,6 +170,9 @@ alias bi='bundle install'
 alias bu='bundle update'
 alias bug='bundle upgrade'
 alias be='bundle exec'
+
+# gulp
+alias cgulp='gulp --require coffee-script'
 
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
@@ -227,3 +232,15 @@ export RAILS_ENV=development
 # Android
 export PATH="/Applications/eclipse/sdk/tools:$PATH"
 export PATH="/Applications/eclipse/sdk/platform-tools:$PATH"
+#export ANDROID_HOME="/Applications/eclipse/sdk"
+#export JAVA_HOME="/usr/libexec/java_home"
+#export JAVA_HOME="/Library/Java/Home"
+#export PATH="$JAVA_HOME/bin:$PATH"
+export _JAVA_OPTIONS='-Dfile.encoding=UTF-8'
+
+# phpenv
+# export PATH=$PATH:$HOME/.phpenv/bin
+# eval "$(phpenv init - zsh)"
+
+# php5
+export PATH=/usr/local/php5/bin:$PATH
