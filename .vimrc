@@ -113,8 +113,8 @@ cmap w!! w !sudo tee > /dev/null %
 
 " /{pattern}の入力中は「/」をタイプすると自動で「\/」が、
 " ?{pattern}の入力中は「?」をタイプすると自動で「\?」が 入力されるようになる
-cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
-cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+" cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+" cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
 
 " 検索後にジャンプした際に検索単語を画面中央に持ってくる
 nnoremap n nzz
@@ -127,6 +127,8 @@ nnoremap g# g#zz
 " j, k による移動を折り返されたテキストでも自然に振る舞うように変更
 nnoremap j gj
 nnoremap k gk
+vnoremap j gj
+vnoremap k gk
 
 " C-dでdelete
 inoremap <C-d> <Delete>
@@ -149,11 +151,6 @@ vnoremap <C-j> <Esc>
 " <Tab> -> [Tag]
 nnoremap [Tag] <Nop>
 nmap     <Tab> [Tag]
-
-" t1 で1番左のタブ、t2 で1番左から2番目のタブにジャンプ
-for n in range(1, 9)
-  execute 'nnoremap <silent> [Tag]'.n  ':<C-u>tabnext'.n.'<CR>'
-endfor
 
 " tabn 新しいタブを作る
 map <silent> [Tag]n :tabnew<CR>
@@ -180,9 +177,6 @@ endif
 nnoremap [Tag]i <C-i>
 nnoremap [Tag]o <C-o>
 
-" quickfix表示
-nnoremap [Tag]q :cw<CR>
-
 " URL上でC-lでブラウザオープン
 nmap <C-l> <Plug>(openbrowser-open)
 
@@ -198,60 +192,6 @@ nnoremap <Space>: A;<Esc>
 " C-gでフルパスを表示
 nnoremap <C-g> 1<C-g>
 
-
-"-------------------------------------------------------------------------------"
-" function
-"-------------------------------------------------------------------------------"
-
-" :e などでファイルを開く際にフォルダが存在しない場合は自動作成
-function! s:mkdir(dir, force)
-  if !isdirectory(a:dir) && (a:force ||
-        \ input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
-    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
-  endif
-endfunction
-
-
-
-"-------------------------------------------------------------------------------"
-" language
-"-------------------------------------------------------------------------------"
-
-" Ruby用設定
-" :makeでRuby構文チェック
-au FileType ruby setlocal makeprg=ruby\ -c\ %
-au FileType ruby setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-
-" PHP用設定
-" PHP辞書ファイル指定
-autocmd FileType php,ctp :set dictionary=~/.vim/dict/php.dict
-" :makeでPHP構文チェック
-au FileType php setlocal makeprg=php\ -l\ %
-au FileType php setlocal errorformat=%m\ in\ %f\ on\ line\ %l
-" PHPの関数やクラスの折りたたみ
-let php_folding = 0
-" 文字列の中のSQLをハイライト
-let php_sql_query = 1
-" Baselibメソッドのハイライト
-let php_baselib = 1
-" HTMLもハイライト
-let php_htmlInStrings = 1
-" ] や ) の対応エラーをハイライト
-let php_parent_error_close = 1
-let php_parent_error_open = 1
-" ハイライト色設定
-highlight Pmenu ctermbg=4
-highlight PmenuSel ctermbg=1
-highlight PMenuSbar ctermbg=4
-
-
-" markdown
-autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-imap <Nul> <Esc><S-a><Space><Space><Esc>o
-nmap <Nul> <S-a><Space><Space><Esc>
-imap <C-Space> <S-Space><S-Space><CR>
-nmap <C-Space> <S-a><Space><Space><Esc>
-
 " カーソルキー
 nnoremap [A <Up>
 nnoremap [B <Down>
@@ -262,11 +202,22 @@ inoremap [B <Down>
 inoremap [C <Right>
 inoremap [D <Left>
 
-" 保存
-nnoremap <Space>w :w<CR>
-
 " ペースト
 inoremap <C-v> <Esc>p<S-a>
+
+" ,の後ろにスペース
+inoremap , ,<Space>
+
+
+"-------------------------------------------------------------------------------"
+" language
+"-------------------------------------------------------------------------------"
+" markdown
+autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+imap <Nul> <Esc><S-a><Space><Space><Esc>o
+nmap <Nul> <S-a><Space><Space><Esc>
+imap <C-Space> <S-Space><S-Space><CR>
+nmap <C-Space> <S-a><Space><Space><Esc>
 
 
 "-------------------------------------------------------------------------------"
@@ -296,7 +247,7 @@ NeoBundle 'bling/vim-airline'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimproc', {
+NeoBundle 'Shougo/vimproc.vim', {
 	\ 'build' : {
 		\     'windows' : 'make -f make_mingw32.mak',
 		\     'cygwin' : 'make -f make_cygwin.mak',
@@ -318,6 +269,10 @@ NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-textobj-indent'
 NeoBundle 'cohama/vim-smartinput-endwise'
 NeoBundle 'vim-scripts/closetag.vim'
+NeoBundle 'terryma/vim-multiple-cursors'
+NeoBundle 'tyru/caw.vim'
+NeoBundle 'rhysd/clever-f.vim'
+NeoBundle 'thinca/vim-qfreplace'
 
 " その他拡張
 NeoBundle 'kana/vim-submode'
@@ -325,6 +280,7 @@ NeoBundle 'vim-scripts/vim-auto-save'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'AtsushiM/search-parent.vim'
+NeoBundle 'mattn/benchvimrc-vim'
 
 " git
 NeoBundle 'tpope/vim-fugitive'
@@ -342,11 +298,13 @@ NeoBundle 'aharisu/vim_goshrepl'
 " html系
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'slim-template/vim-slim'
+NeoBundle 'digitaltoad/vim-jade'
 
 " css系
 NeoBundle 'AtsushiM/sass-compile.vim'
 NeoBundle 'hail2u/vim-css3-syntax'
 NeoBundle 'lilydjwg/colorizer'
+NeoBundle 'wavded/vim-stylus'
 
 " javascript系
 NeoBundle 'jelera/vim-javascript-syntax'
@@ -363,6 +321,14 @@ NeoBundle 'kannokanno/previm'
 
 " 外部サービス連携
 NeoBundle 'moznion/hateblo.vim'
+
+" Twitter
+NeoBundle 'basyura/TweetVim'
+NeoBundle 'mattn/webapi-vim'
+NeoBundle 'basyura/twibill.vim'
+NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'basyura/bitly.vim'
+NeoBundle 'Shougo/unite.vim'
 
 filetype plugin indent on
 
@@ -683,13 +649,6 @@ call smartinput#define_rule({
             \   'filetype' : ['coffee'],
             \    })
 
-" smartchr
-" inoremap <buffer> <expr> = smartchr#loop(' = ', ' == ', '=')
-" inoremap <buffer> <expr> <S-=> smartchr#loop(' + ', '+')
-" inoremap <buffer> <expr> - smartchr#loop(' - ', '-')
-"inoremap <buffer> <expr> , smartchr#loop(', ', ',')
-inoremap , ,<Space>
-
 " Simple-Javascript-Indenter
 let g:SimpleJsIndenter_BriefMode = 2
 let g:SimpleJsIndenter_CaseIndentLevel = -1
@@ -732,10 +691,23 @@ nnoremap [fugitive]l  :<C-u>Glog<CR>
 nnoremap [fugitive]m  :<C-u>Gmove<Space>
 nnoremap [fugitive]r  :<C-u>Gremove<CR>
 nnoremap [fugitive]g  :<C-u>Ggrep 
-nnoremap [fugitive]b  :<C-u>Gbrowse<CR>
+nnoremap [fugitive]b  :<C-u>Gblame w<CR>
 
 " matchit
 runtime macros/matchit.vim
 
 " closetag.vim
 :let g:closetag_html_style=1
+
+" TweetVim
+nnoremap [tweetvim] <Nop>
+nmap <Space>t [tweetvim]
+nnoremap <silent> [tweetvim]h :<C-u>TweetVimHomeTimeline<CR>
+nnoremap <silent> [tweetvim]m :<C-u>TweetVimMentions<CR>
+nnoremap <silent> [tweetvim]t :<C-u>TweetVimSay<CR>
+nnoremap <silent> [tweetvim]c :<C-u>TweetVimCurrentLineSay<CR>
+nnoremap <silent> [tweetvim]s :<C-u>TweetVimSearch 
+
+" caw.vim (コメントアウト)
+nmap <Leader>c <Plug>(caw:i:toggle)
+vmap <Leader>c <Plug>(caw:i:toggle)
