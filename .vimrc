@@ -49,8 +49,8 @@ set wildmenu      " コマンドの補完候補を表示
 "set helplang=ja,en    " ヘルプ検索で日本語を優先
 
 " 検索設定
-set hlsearch " 検索結果強調-:nohで解除
-set incsearch " インクリメンタルサーチを有効
+" set hlsearch " 検索結果強調-:nohで解除
+" set incsearch " インクリメンタルサーチを有効
 set ignorecase " 検索時に大文字・小文字を区別しない
 set smartcase " 検索語に大文字小文字が混在している場合は区別する
 
@@ -281,6 +281,7 @@ NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'AtsushiM/search-parent.vim'
 NeoBundle 'mattn/benchvimrc-vim'
+NeoBundle 'haya14busa/incsearch.vim'
 
 " git
 NeoBundle 'tpope/vim-fugitive'
@@ -711,3 +712,8 @@ nnoremap <silent> [tweetvim]s :<C-u>TweetVimSearch
 " caw.vim (コメントアウト)
 nmap <Leader>c <Plug>(caw:i:toggle)
 vmap <Leader>c <Plug>(caw:i:toggle)
+
+" incsearch.vim
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
