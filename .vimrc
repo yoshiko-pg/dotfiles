@@ -22,10 +22,10 @@ set notimeout ttimeout ttimeoutlen=200 " キーコードはすぐtimeout、マ�
 " インデント設定
 set cindent
 set autoindent
-set shiftwidth=4 " 自動インデントの空白の数
+set shiftwidth=2 " 自動インデントの空白の数
 set expandtab
 set smarttab  " 行頭にTabでshiftwidth分インデントする
-set tabstop=4  " 画面上のTab幅
+set tabstop=2  " 画面上のTab幅
 set shiftround " インデントをshiftwidthの幅に丸める
 
 " エンコーディング関連
@@ -282,6 +282,7 @@ NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'AtsushiM/search-parent.vim'
 NeoBundle 'mattn/benchvimrc-vim'
 NeoBundle 'haya14busa/incsearch.vim'
+NeoBundle 'vim-scripts/renamer.vim'
 
 " git
 NeoBundle 'tpope/vim-fugitive'
@@ -306,6 +307,7 @@ NeoBundle 'AtsushiM/sass-compile.vim'
 NeoBundle 'hail2u/vim-css3-syntax'
 NeoBundle 'lilydjwg/colorizer'
 NeoBundle 'wavded/vim-stylus'
+NeoBundle 'groenewege/vim-less'
 
 " javascript系
 NeoBundle 'jelera/vim-javascript-syntax'
