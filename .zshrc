@@ -197,6 +197,9 @@ alias rnewslim='rails new$1 -m https://github.com/yoshiko-pg/rails_slim_template
 alias -g L='| less'
 alias -g G='| grep'
 
+# スリープ解除時間
+function when(){grep Wake /var/log/system.log}
+
 # alias C で標準出力をクリップボードにコピーする
 # mollifier delta blog : http://mollifier.hatenablog.com/entry/20100317/p1
 if which pbcopy >/dev/null 2>&1 ; then
