@@ -164,6 +164,9 @@ alias mv='mv -i'
 alias g='git'
 alias gits='git status'
 alias gitrmall='git rm $(git ls-files --deleted)'
+for n in $(seq 50); do
+  alias gitrb$n="git rebase -i HEAD~$n"
+done
 
 # bundle
 alias bi='bundle install'
@@ -184,6 +187,7 @@ alias site='cd ~/Dropbox/site/;'
 alias sand='cd ~/local/sandbox/;'
 alias gh='cd ~/Dropbox/site/github/;'
 alias blog='cd ~/Dropbox/other/blog/;'
+alias book='cd ~/Dropbox/work/html-css-book/;'
 alias pj='cd ~/Company/project;'
 
 # 現在のディレクトリで新しいタブ
@@ -247,3 +251,21 @@ export _JAVA_OPTIONS='-Dfile.encoding=UTF-8'
 
 # php5
 export PATH=/usr/local/php5/bin:$PATH
+alias php=/usr/local/php5/bin/php
+export PATH="/Users/maasa/.composer/vendor/bin:$PATH"
+
+# review
+export PATH="/usr/local/review/bin:$PATH"
+export PATH="/Users/maasa/.rbenv/versions/2.1.1/bin:$PATH"
+
+# VSC
+function vsc {
+    if [[ $# = 0 ]]
+    then
+        open -a "Visual Studio Code"
+    else
+        local argPath="$1"
+        [[ $1 = /* ]] && argPath="$1" || argPath="$PWD/${1#./}"
+        open -a "Visual Studio Code" "$argPath"
+    fi
+}

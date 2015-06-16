@@ -69,6 +69,7 @@ set ruler    " カーソルの現在地表示
 set showmatch   " 括弧強調
 set wrap    " はみ出しの折り返し
 set textwidth=0 " 入力されているテキストの最大幅を無視
+set formatoptions=q " 勝手に改行させない
 syntax on   " 強調表示有効
 colorscheme lucius
 highlight Folded cterm=bold,underline ctermfg=4
@@ -95,6 +96,12 @@ endif
 
 "コメントアウト
 autocmd FileType * setlocal formatoptions-=ro
+
+" 差分
+set diffopt=filler,iwhite
+
+" -で単語分割しない
+" set isk+=-
 
 "-------------------------------------------------------------------------------"
 " Mapping
@@ -203,10 +210,13 @@ inoremap [C <Right>
 inoremap [D <Left>
 
 " ペースト
-inoremap <C-v> <Esc>p<S-a>
+"inoremap <C-v> <Esc>p<S-a>
 
 " ,の後ろにスペース
 inoremap , ,<Space>
+
+" :cnext
+nnoremap cn :cn<CR>
 
 
 "-------------------------------------------------------------------------------"
@@ -225,6 +235,7 @@ nmap <C-Space> <S-a><Space><Space><Esc>
 "-------------------------------------------------------------------------------"
 autocmd BufNewFile *.html 0r ~/.vim/templates/template.html
 autocmd BufNewFile *.php 0r ~/.vim/templates/template.php
+autocmd BufNewFile gulpfile.js 0r ~/.vim/templates/gulpfile.js
 
 
 "-------------------------------------------------------------------------------"
@@ -308,6 +319,7 @@ NeoBundle 'hail2u/vim-css3-syntax'
 NeoBundle 'lilydjwg/colorizer'
 NeoBundle 'wavded/vim-stylus'
 NeoBundle 'groenewege/vim-less'
+NeoBundle 'csscomb/vim-csscomb'
 
 " javascript系
 NeoBundle 'jelera/vim-javascript-syntax'
@@ -321,6 +333,9 @@ NeoBundle 'kchmck/vim-coffee-script'
 
 " markdown
 NeoBundle 'kannokanno/previm'
+
+" その他言語
+NeoBundle 'moro/vim-review'
 
 " 外部サービス連携
 NeoBundle 'moznion/hateblo.vim'
@@ -337,7 +352,7 @@ filetype plugin indent on
 
 
 " neocompleteを起動時に有効化する
-let g:neocomplete#enable_at_startup = 1
+"let g:neocomplete#enable_at_startup = 1
 
 " 大文字を区切りとしたワイルドカードのように振る舞う機能
 let g:neocomplete#enable_camel_case_completion = 1
@@ -566,35 +581,35 @@ call smartinput#define_rule({
 
 
 " \s= を入力したときに空白を挟む
-call smartinput#map_to_trigger('i', '=', '=', '=')
-call smartinput#define_rule(
-    \ { 'at'    : '\s\%#'
-    \ , 'char'  : '='
-    \ , 'input' : '= '
-    \ })
-
-" でも連続した == となる場合には空白は挟まない
-call smartinput#define_rule(
-    \ { 'at'    : '=\s\%#'
-    \ , 'char'  : '='
-    \ , 'input' : '<BS>= '
-    \ })
-
-" でも連続した =~ となる場合には空白は挟まない
-call smartinput#map_to_trigger('i', '~', '~', '~')
-call smartinput#define_rule(
-    \ { 'at'    : '=\s\%#'
-    \ , 'char'  : '~'
-    \ , 'input' : '<BS>~ '
-    \ })
-
-" でも連続した => となる場合には空白は挟まない
-call smartinput#map_to_trigger('i', '>', '>', '>')
-call smartinput#define_rule(
-    \ { 'at'    : '=\s\%#'
-    \ , 'char'  : '>'
-    \ , 'input' : '<BS>> '
-    \ })
+"call smartinput#map_to_trigger('i', '=', '=', '=')
+"call smartinput#define_rule(
+"    \ { 'at'    : '\s\%#'
+"    \ , 'char'  : '='
+"    \ , 'input' : '= '
+"    \ })
+"
+"" でも連続した == となる場合には空白は挟まない
+"call smartinput#define_rule(
+"    \ { 'at'    : '=\s\%#'
+"    \ , 'char'  : '='
+"    \ , 'input' : '<BS>= '
+"    \ })
+"
+"" でも連続した =~ となる場合には空白は挟まない
+"call smartinput#map_to_trigger('i', '~', '~', '~')
+"call smartinput#define_rule(
+"    \ { 'at'    : '=\s\%#'
+"    \ , 'char'  : '~'
+"    \ , 'input' : '<BS>~ '
+"    \ })
+"
+"" でも連続した => となる場合には空白は挟まない
+"call smartinput#map_to_trigger('i', '>', '>', '>')
+"call smartinput#define_rule(
+"    \ { 'at'    : '=\s\%#'
+"    \ , 'char'  : '>'
+"    \ , 'input' : '<BS>> '
+"    \ })
 
 " erb <%  %>
 call smartinput#map_to_trigger('i', '%', '%', '%')
@@ -637,7 +652,7 @@ call smartinput#define_rule({
 call smartinput#define_rule({
             \   'at'    : '>\%#<\/',
             \   'char'  : '<CR>',
-            \   'input' : '<CR><Tab><Esc><S-o>',
+            \   'input' : '<CR><Esc><S-o>',
             \   })
 
 " end自動挿入
@@ -650,6 +665,45 @@ call smartinput#define_rule({
             \   'char' : '<CR>',
             \   'input' : '<Esc><S-a><Space>-><CR>',
             \   'filetype' : ['coffee'],
+            \    })
+
+" Re:VIEW
+call smartinput#define_rule({
+            \   'at'    : '\/\/emlist\%#',
+            \   'char'  : '<CR>',
+            \   'input' : '{<CR><CR>//}<Esc>ki',
+            \   'filetype' : ['review'],
+            \   })
+call smartinput#define_rule({
+            \   'at'    : '\/\/list\%#',
+            \   'char'  : '<CR>',
+            \   'input' : '[][]{<CR><CR>//}<Esc>ki',
+            \   'filetype' : ['review'],
+            \   })
+call smartinput#define_rule({
+            \   'at'    : '\/\/image\%#',
+            \   'char'  : '<CR>',
+            \   'input' : '[][]{<CR><CR>//}<Esc>ki',
+            \   'filetype' : ['review'],
+            \   })
+call smartinput#define_rule({
+            \   'at'    : 'col\%#',
+            \   'char'  : '<CR>',
+            \   'input' : '<BS><BS><BS>===[column] <CR><CR><CR>===[/column]<Esc>kkk<S-a>',
+            \   'filetype' : ['review'],
+            \   })
+
+" javascript
+call smartinput#map_to_trigger('i', '<CR>', '<CR>', '<CR>')
+call smartinput#define_rule({
+            \   'at' : 'fn\%#',
+            \   'char' : '<CR>',
+            \   'input' : '<BS>unction<Space>()<Space>{<CR>}<Esc>O'
+            \    })
+call smartinput#define_rule({
+            \   'at' : '=\%#',
+            \   'char' : '<CR>',
+            \   'input' : '<BS>()<Space>=><Space>'
             \    })
 
 " Simple-Javascript-Indenter
