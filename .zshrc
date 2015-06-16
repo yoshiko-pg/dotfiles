@@ -5,7 +5,7 @@ export LANG=ja_JP.UTF-8
 autoload -Uz colors
 colors
 export CLICOLOR=1
-eval $(/usr/local/bin/gdircolors ~/Dropbox/app/Terminal/solarized/dircolors-solarized-master/dircolors.ansi-universal)
+# eval $(/usr/local/bin/gdircolors ~/Dropbox/app/Terminal/solarized/dircolors-solarized-master/dircolors.ansi-universal)
 export LSCOLORS=ExFxBxDxCxegedabagacad
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 alias ls='/usr/local/bin/gls --color=auto'
@@ -19,6 +19,7 @@ SAVEHIST=10000
 # プロンプト
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn
+zstyle ':vcs_info:git:*:-all-' command /usr/bin/git
 zstyle ':vcs_info:*' max-exports 6 # formatに入る変数の最大数
 zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git:*' formats '%b@%r' '%c' '%u'
@@ -161,9 +162,37 @@ alias cp='cp -i'
 alias mv='mv -i'
 
 # git
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+function git(){hub "$@"}
 alias g='git'
 alias gits='git status'
 alias gitrmall='git rm $(git ls-files --deleted)'
+alias gh='git gh'
+alias gpr='git pull-request'
+
+: ${_omz_git_git_cmd:=git}
+function current_branch() {
+  local ref
+  ref=$($_omz_git_git_cmd symbolic-ref --quiet HEAD 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]]; then
+    [[ $ret == 128 ]] && return  # no git repo.
+    ref=$($_omz_git_git_cmd rev-parse --short HEAD 2> /dev/null) || return
+  fi
+  echo ${ref#refs/heads/}
+}
+ggl() {
+  [[ "$#" == 0 ]] && local b="$(current_branch)"
+  git pull origin "${b:=$1}" "${*[2,-1]}"
+}
+ggp() {
+  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+    git push origin "${*}"
+  else
+    [[ "$#" == 0 ]] && local b="$(current_branch)"
+    git push origin "${b:=$1}"
+  fi
+}
 
 # bundle
 alias bi='bundle install'
@@ -178,20 +207,11 @@ alias cgulp='gulp --require coffee-script'
 alias sudo='sudo '
 
 # カスタム移動系
-alias d='cd ~/Dropbox;'
-alias dt='cd ~/Desktop;'
-alias site='cd ~/Dropbox/site/;'
-alias sand='cd ~/local/sandbox/;'
-alias gh='cd ~/Dropbox/site/github/;'
-alias blog='cd ~/Dropbox/other/blog/;'
-alias pj='cd ~/Company/project;'
-
-# 現在のディレクトリで新しいタブ
-alias t='~/Dropbox/app/script/createTabAtCurrentDir.applescript'
-
-# テンプレートからrails new
-alias rnew='rails new$1 -m https://github.com/yoshiko-pg/rails_slim_template/raw/master/rails_slim_template.rb'
-alias rnewslim='rails new$1 -m https://github.com/yoshiko-pg/rails_slim_template/raw/master/rails_slim_mini.rb'
+alias d='cd ~/Desktop;'
+alias w='cd ~/workspace;'
+alias api='cd ~/workspace/prott-api;'
+alias we='cd ~/workspace/prott-webapp;'
+alias s='cd ~/workspace/sandbox;'
 
 # グローバルエイリアス
 alias -g L='| less'
@@ -214,32 +234,37 @@ elif which putclip >/dev/null 2>&1 ; then
 fi
 
 # macvim
-export PATH="/Applications/MacVim.app/Contents/MacOS:$PATH"
-alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
-alias vi=vim
+# export PATH="/Applications/MacVim.app/Contents/MacOS:$PATH"
+# alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
+# alias vi=vim
 
 # rbenv
-eval "$(rbenv init - zsh)"
+export RBENV_ROOT=/usr/local/var/rbenv
+if which rbenv > /dev/null; then eval "$(rbenv init - zsh)"; fi
+
+# ruby
+# export RUBYGEMS_GEMDEPS=-
 
 # zaw.zsh
-function mkcd(){mkdir -p $1 && cd $1}
-source /Users/maasa/zsh_plugin/zaw/zaw.zsh
-bindkey '^h' zaw-history
+# function mkcd(){mkdir -p $1 && cd $1}
+# source /Users/maasa/zsh_plugin/zaw/zaw.zsh
+# bindkey '^h' zaw-history
 
 # postgresql
-PATH="/Applications/Postgres.app/Contents/Versions/9.3/bin:$PATH"
+# 
+# PATH="/Applications/Postgres.app/Contents/Versions/9.3/bin:$PATH"
 
 # rails
 export RAILS_ENV=development
 
 # Android
-export PATH="/Applications/eclipse/sdk/tools:$PATH"
-export PATH="/Applications/eclipse/sdk/platform-tools:$PATH"
+# export PATH="/Applications/eclipse/sdk/tools:$PATH"
+# export PATH="/Applications/eclipse/sdk/platform-tools:$PATH"
 #export ANDROID_HOME="/Applications/eclipse/sdk"
 #export JAVA_HOME="/usr/libexec/java_home"
 #export JAVA_HOME="/Library/Java/Home"
 #export PATH="$JAVA_HOME/bin:$PATH"
-export _JAVA_OPTIONS='-Dfile.encoding=UTF-8'
+# export _JAVA_OPTIONS='-Dfile.encoding=UTF-8'
 
 # phpenv
 # export PATH=$PATH:$HOME/.phpenv/bin
@@ -247,3 +272,72 @@ export _JAVA_OPTIONS='-Dfile.encoding=UTF-8'
 
 # php5
 export PATH=/usr/local/php5/bin:$PATH
+
+# nodebrew
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+# Prott
+export PATH=/Users/yoshiko/workspace/tools/prott-commands/bin:$PATH
+
+# tmux
+function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
+function is_osx() { [[ $OSTYPE == darwin* ]]; }
+function is_screen_running() { [ ! -z "$STY" ]; }
+function is_tmux_runnning() { [ ! -z "$TMUX" ]; }
+function is_screen_or_tmux_running() { is_screen_running || is_tmux_runnning; }
+function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
+function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
+
+function tmux_automatically_attach_session()
+{
+    if is_screen_or_tmux_running; then
+        ! is_exists 'tmux' && return 1
+
+        if is_tmux_runnning; then
+            # echo "${fg_bold[red]} _____ __  __ _   ___  __ ${reset_color}"
+            # echo "${fg_bold[red]}|_   _|  \/  | | | \ \/ / ${reset_color}"
+            # echo "${fg_bold[red]}  | | | |\/| | | | |\  /  ${reset_color}"
+            # echo "${fg_bold[red]}  | | | |  | | |_| |/  \  ${reset_color}"
+            # echo "${fg_bold[red]}  |_| |_|  |_|\___//_/\_\ ${reset_color}"
+        elif is_screen_running; then
+            echo "This is on screen."
+        fi
+    else
+        if shell_has_started_interactively && ! is_ssh_running; then
+            if ! is_exists 'tmux'; then
+                echo 'Error: tmux command not found' 2>&1
+                return 1
+            fi
+
+            if tmux has-session >/dev/null 2>&1 && tmux list-sessions | grep -qE '.*]$'; then
+                # detached session exists
+                tmux list-sessions
+                echo -n "Tmux: attach? (y/N/num) "
+                read
+                if [[ "$REPLY" =~ ^[Yy]$ ]] || [[ "$REPLY" == '' ]]; then
+                    tmux attach-session
+                    if [ $? -eq 0 ]; then
+                        echo "$(tmux -V) attached session"
+                        return 0
+                    fi
+                elif [[ "$REPLY" =~ ^[0-9]+$ ]]; then
+                    tmux attach -t "$REPLY"
+                    if [ $? -eq 0 ]; then
+                        echo "$(tmux -V) attached session"
+                        return 0
+                    fi
+                fi
+            fi
+
+            if is_osx && is_exists 'reattach-to-user-namespace'; then
+                # on OS X force tmux's default command
+                # to spawn a shell in the user's namespace
+                tmux_config=$(cat $HOME/.tmux.conf <(echo 'set-option -g default-command "reattach-to-user-namespace -l $SHELL"'))
+                tmux -f <(echo "$tmux_config") new-session && echo "$(tmux -V) created new session supported OS X"
+            else
+                tmux new-session && echo "tmux created new session"
+            fi
+        fi
+    fi
+}
+tmux_automatically_attach_session

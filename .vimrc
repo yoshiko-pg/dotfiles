@@ -208,6 +208,12 @@ inoremap <C-v> <Esc>p<S-a>
 " ,の後ろにスペース
 inoremap , ,<Space>
 
+" 新しいバッファ
+nnoremap [Tag]v :vsplit + enew<CR>
+
+" バッファ同士での差分
+nnoremap [Tag]d :windo diffthis<CR>
+
 
 "-------------------------------------------------------------------------------"
 " language
@@ -221,23 +227,34 @@ nmap <C-Space> <S-a><Space><Space><Esc>
 
 
 "-------------------------------------------------------------------------------"
-" template
-"-------------------------------------------------------------------------------"
-autocmd BufNewFile *.html 0r ~/.vim/templates/template.html
-autocmd BufNewFile *.php 0r ~/.vim/templates/template.php
-
-
-"-------------------------------------------------------------------------------"
 " Plugin
 "-------------------------------------------------------------------------------"
-filetype off
-filetype plugin indent off
 
+""NeoBundle Scripts-----------------------------
 if has('vim_starting')
- set runtimepath+=~/.vim/bundle/neobundle.vim/
+  if &compatible
+    set nocompatible               " Be iMproved
+  endif
+
+  " Required:
+  set runtimepath+=/Users/yoshiko/.vim/bundle/neobundle.vim/
 endif
-call neobundle#rc(expand('~/.vim/bundle/'))
-NeoBundle 'Shougo/neobundle.vim'
+
+" Required:
+call neobundle#begin(expand('/Users/yoshiko/.vim/bundle'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Add or remove your Bundles here:
+NeoBundle 'Shougo/neosnippet.vim'
+NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'ctrlpvim/ctrlp.vim'
+NeoBundle 'flazz/vim-colorschemes'
+
+" ===== my plugins =====================================================
 
 " カラースキーム、見た目
 NeoBundle 'jonathanfilip/vim-lucius'
@@ -248,12 +265,12 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimproc.vim', {
-	\ 'build' : {
-		\     'windows' : 'make -f make_mingw32.mak',
-		\     'cygwin' : 'make -f make_cygwin.mak',
-		\     'mac' : 'make -f make_mac.mak',
-		\     'unix' : 'make -f make_unix.mak',
-	\    },
+  \ 'build' : {
+    \     'windows' : 'make -f make_mingw32.mak',
+    \     'cygwin' : 'make -f make_cygwin.mak',
+    \     'mac' : 'make -f make_mac.mak',
+    \     'unix' : 'make -f make_unix.mak',
+  \    },
 \ }
 NeoBundle 'Shougo/vimshell.vim'
 
@@ -333,7 +350,22 @@ NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'basyura/bitly.vim'
 NeoBundle 'Shougo/unite.vim'
 
+" /===== my plugins =====================================================
+
+" You can specify revision/branch/tag.
+NeoBundle 'Shougo/vimshell',  { 'rev' : '3787e5' }
+
+" Required:
+call neobundle#end()
+
+" Required:
 filetype plugin indent on
+
+" If there are uninstalled bundles found on startup, 
+" this will conveniently prompt you to install them.
+NeoBundleCheck
+"End NeoBundle Scripts-------------------------
+
 
 
 " neocompleteを起動時に有効化する
@@ -407,11 +439,15 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:Powerline_symbols = 'fancy'
 let g:airline_left_sep = '⮀'
 let g:airline_right_sep = '⮂'
-let g:airline_linecolumn_prefix = '⭡'
-let g:airline_branch_prefix = '⭠'
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.space = "\ua0"
+let g:airline_symbols.linenr = '⭡'
+let g:airline_symbols.branch = '⭠'
+let g:airline_symbols.readonly = '⭤ '
 let g:airline#extensions#tabline#left_sep = '⮀'
 let g:airline#extensions#tabline#left_alt_sep = '⮂'
-let g:airline#extensions#readonly#symbol = '⭤ '
 
 " GoshREPL
 let g:neocomplete#keyword_patterns = {}
@@ -565,36 +601,36 @@ call smartinput#define_rule({
             \   })
 
 
-" \s= を入力したときに空白を挟む
-call smartinput#map_to_trigger('i', '=', '=', '=')
-call smartinput#define_rule(
-    \ { 'at'    : '\s\%#'
-    \ , 'char'  : '='
-    \ , 'input' : '= '
-    \ })
-
-" でも連続した == となる場合には空白は挟まない
-call smartinput#define_rule(
-    \ { 'at'    : '=\s\%#'
-    \ , 'char'  : '='
-    \ , 'input' : '<BS>= '
-    \ })
-
-" でも連続した =~ となる場合には空白は挟まない
-call smartinput#map_to_trigger('i', '~', '~', '~')
-call smartinput#define_rule(
-    \ { 'at'    : '=\s\%#'
-    \ , 'char'  : '~'
-    \ , 'input' : '<BS>~ '
-    \ })
-
-" でも連続した => となる場合には空白は挟まない
-call smartinput#map_to_trigger('i', '>', '>', '>')
-call smartinput#define_rule(
-    \ { 'at'    : '=\s\%#'
-    \ , 'char'  : '>'
-    \ , 'input' : '<BS>> '
-    \ })
+" " \s= を入力したときに空白を挟む
+" call smartinput#map_to_trigger('i', '=', '=', '=')
+" call smartinput#define_rule(
+"     \ { 'at'    : '\s\%#'
+"     \ , 'char'  : '='
+"     \ , 'input' : '= '
+"     \ })
+"
+" " でも連続した == となる場合には空白は挟まない
+" call smartinput#define_rule(
+"     \ { 'at'    : '=\s\%#'
+"     \ , 'char'  : '='
+"     \ , 'input' : '<BS>= '
+"     \ })
+"
+" " でも連続した =~ となる場合には空白は挟まない
+" call smartinput#map_to_trigger('i', '~', '~', '~')
+" call smartinput#define_rule(
+"     \ { 'at'    : '=\s\%#'
+"     \ , 'char'  : '~'
+"     \ , 'input' : '<BS>~ '
+"     \ })
+"
+" " でも連続した => となる場合には空白は挟まない
+" call smartinput#map_to_trigger('i', '>', '>', '>')
+" call smartinput#define_rule(
+"     \ { 'at'    : '=\s\%#'
+"     \ , 'char'  : '>'
+"     \ , 'input' : '<BS>> '
+"     \ })
 
 " erb <%  %>
 call smartinput#map_to_trigger('i', '%', '%', '%')
@@ -642,6 +678,24 @@ call smartinput#define_rule({
 
 " end自動挿入
 call smartinput_endwise#define_default_rules()
+
+" js console.log
+call smartinput#map_to_trigger('i', '<CR>', '<CR>', '<CR>')
+call smartinput#define_rule({
+            \   'at' : 'cl\%#',
+            \   'char' : '<CR>',
+            \   'input' : '<BS>onsole.log()<Left>',
+            \   'filetype' : ['javascript'],
+            \    })
+
+" coffee console.log
+call smartinput#map_to_trigger('i', '<CR>', '<CR>', '<CR>')
+call smartinput#define_rule({
+            \   'at' : 'cl\%#',
+            \   'char' : '<CR>',
+            \   'input' : '<BS>onsole.log<Space>',
+            \   'filetype' : ['coffee'],
+            \    })
 
 " coffee |) で改行したら->を自動で入れる
 call smartinput#map_to_trigger('i', '<CR>', '<CR>', '<CR>')
