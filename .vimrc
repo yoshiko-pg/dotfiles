@@ -210,13 +210,19 @@ inoremap [C <Right>
 inoremap [D <Left>
 
 " ペースト
-"inoremap <C-v> <Esc>p<S-a>
+inoremap <C-v> <Esc>p<S-a>
 
 " ,の後ろにスペース
 inoremap , ,<Space>
 
 " :cnext
 nnoremap cn :cn<CR>
+
+" 新しいバッファ
+nnoremap [Tag]v :vsplit + enew<CR>
+
+" バッファ同士での差分
+nnoremap [Tag]d :windo diffthis<CR>
 
 
 "-------------------------------------------------------------------------------"

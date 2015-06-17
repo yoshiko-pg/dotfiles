@@ -19,6 +19,7 @@ SAVEHIST=10000
 # プロンプト
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn
+zstyle ':vcs_info:git:*:-all-' command /usr/bin/git
 zstyle ':vcs_info:*' max-exports 6 # formatに入る変数の最大数
 zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git:*' formats '%b@%r' '%c' '%u'
@@ -161,12 +162,40 @@ alias cp='cp -i'
 alias mv='mv -i'
 
 # git
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+function git(){hub "$@"}
 alias g='git'
 alias gits='git status'
 alias gitrmall='git rm $(git ls-files --deleted)'
+alias gh='git gh'
+alias gpr='git pull-request'
 for n in $(seq 50); do
   alias gitrb$n="git rebase -i HEAD~$n"
 done
+
+: ${_omz_git_git_cmd:=git}
+function current_branch() {
+  local ref
+  ref=$($_omz_git_git_cmd symbolic-ref --quiet HEAD 2> /dev/null)
+  local ret=$?
+  if [[ $ret != 0 ]]; then
+    [[ $ret == 128 ]] && return  # no git repo.
+    ref=$($_omz_git_git_cmd rev-parse --short HEAD 2> /dev/null) || return
+  fi
+  echo ${ref#refs/heads/}
+}
+ggl() {
+  [[ "$#" == 0 ]] && local b="$(current_branch)"
+  git pull origin "${b:=$1}" "${*[2,-1]}"
+}
+ggp() {
+  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+    git push origin "${*}"
+  else
+    [[ "$#" == 0 ]] && local b="$(current_branch)"
+    git push origin "${b:=$1}"
+  fi
+}
 
 # bundle
 alias bi='bundle install'
@@ -258,14 +287,66 @@ export PATH="/Users/maasa/.composer/vendor/bin:$PATH"
 export PATH="/usr/local/review/bin:$PATH"
 export PATH="/Users/maasa/.rbenv/versions/2.1.1/bin:$PATH"
 
-# VSC
-function vsc {
-    if [[ $# = 0 ]]
-    then
-        open -a "Visual Studio Code"
+
+# tmux
+function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
+function is_osx() { [[ $OSTYPE == darwin* ]]; }
+function is_screen_running() { [ ! -z "$STY" ]; }
+function is_tmux_runnning() { [ ! -z "$TMUX" ]; }
+function is_screen_or_tmux_running() { is_screen_running || is_tmux_runnning; }
+function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
+function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
+
+function tmux_automatically_attach_session()
+{
+    if is_screen_or_tmux_running; then
+        ! is_exists 'tmux' && return 1
+
+        if is_tmux_runnning; then
+            # echo "${fg_bold[red]} _____ __  __ _   ___  __ ${reset_color}"
+            # echo "${fg_bold[red]}|_   _|  \/  | | | \ \/ / ${reset_color}"
+            # echo "${fg_bold[red]}  | | | |\/| | | | |\  /  ${reset_color}"
+            # echo "${fg_bold[red]}  | | | |  | | |_| |/  \  ${reset_color}"
+            # echo "${fg_bold[red]}  |_| |_|  |_|\___//_/\_\ ${reset_color}"
+        elif is_screen_running; then
+            echo "This is on screen."
+        fi
     else
-        local argPath="$1"
-        [[ $1 = /* ]] && argPath="$1" || argPath="$PWD/${1#./}"
-        open -a "Visual Studio Code" "$argPath"
+        if shell_has_started_interactively && ! is_ssh_running; then
+            if ! is_exists 'tmux'; then
+                echo 'Error: tmux command not found' 2>&1
+                return 1
+            fi
+
+            if tmux has-session >/dev/null 2>&1 && tmux list-sessions | grep -qE '.*]$'; then
+                # detached session exists
+                tmux list-sessions
+                echo -n "Tmux: attach? (y/N/num) "
+                read
+                if [[ "$REPLY" =~ ^[Yy]$ ]] || [[ "$REPLY" == '' ]]; then
+                    tmux attach-session
+                    if [ $? -eq 0 ]; then
+                        echo "$(tmux -V) attached session"
+                        return 0
+                    fi
+                elif [[ "$REPLY" =~ ^[0-9]+$ ]]; then
+                    tmux attach -t "$REPLY"
+                    if [ $? -eq 0 ]; then
+                        echo "$(tmux -V) attached session"
+                        return 0
+                    fi
+                fi
+            fi
+
+            if is_osx && is_exists 'reattach-to-user-namespace'; then
+                # on OS X force tmux's default command
+                # to spawn a shell in the user's namespace
+                tmux_config=$(cat $HOME/.tmux.conf <(echo 'set-option -g default-command "reattach-to-user-namespace -l $SHELL"'))
+                tmux -f <(echo "$tmux_config") new-session && echo "$(tmux -V) created new session supported OS X"
+            else
+                tmux new-session && echo "tmux created new session"
+            fi
+        fi
     fi
 }
+tmux_automatically_attach_session
