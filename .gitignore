@@ -5,3 +5,4 @@
 !.gitignore_global
 !Brewfile
 !.gitignore
+!.tmux.conf
