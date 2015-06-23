@@ -1,8 +1,1 @@
-*
-!.vimrc
-!.zshrc
-!.gitconfig
-!.gitignore_global
-!Brewfile
-!.gitignore
-!.tmux.conf
+*.un~
