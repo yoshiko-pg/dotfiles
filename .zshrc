@@ -8,7 +8,6 @@ export CLICOLOR=1
 # eval $(/usr/local/bin/gdircolors ~/Dropbox/app/Terminal/solarized/dircolors-solarized-master/dircolors.ansi-universal)
 export LSCOLORS=ExFxBxDxCxegedabagacad
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-alias ls='/usr/local/bin/gls --color=auto'
 alias diff='colordiff -u'
 
 # ヒストリの設定
@@ -156,10 +155,15 @@ bindkey "^K" history-beginning-search-forward
 ########################################
 # エイリアス
 
-alias ls='ls -la'
+alias ls='/usr/local/bin/gls -slhaF --color=auto --time-style=long-iso'
+alias ll="ls"
 
 alias cp='cp -i'
 alias mv='mv -i'
+
+function count(){
+  \ls -1 $1 | wc -l
+}
 
 # git
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -169,6 +173,7 @@ alias gits='git status'
 alias gitrmall='git rm $(git ls-files --deleted)'
 alias gh='git gh'
 alias gpr='git pull-request'
+alias pr='gpr'
 
 : ${_omz_git_git_cmd:=git}
 function current_branch() {
