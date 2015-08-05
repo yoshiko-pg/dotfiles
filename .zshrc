@@ -15,6 +15,8 @@ HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 
+ulimit -n 2048
+
 # プロンプト
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn
@@ -174,6 +176,7 @@ alias gitrmall='git rm $(git ls-files --deleted)'
 alias gh='git gh'
 alias gpr='git pull-request'
 alias pr='gpr'
+alias gg='git grep'
 
 : ${_omz_git_git_cmd:=git}
 function current_branch() {
@@ -249,6 +252,14 @@ if which rbenv > /dev/null; then eval "$(rbenv init - zsh)"; fi
 
 # ruby
 # export RUBYGEMS_GEMDEPS=-
+
+# Haskell
+# Add GHC 7.10.1 to the PATH, via https://ghcformacosx.github.io/
+export GHC_DOT_APP="/Applications/ghc-7.10.1.app"
+if [ -d "$GHC_DOT_APP" ]; then
+  export PATH="${HOME}/.cabal/bin:${GHC_DOT_APP}/Contents/bin:${PATH}"
+fi
+
 
 # zaw.zsh
 # function mkcd(){mkdir -p $1 && cd $1}
