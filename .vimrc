@@ -290,6 +290,7 @@ NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'thinca/vim-qfreplace'
+NeoBundle 'rhysd/github-complete.vim'
 
 " その他拡張
 NeoBundle 'kana/vim-submode'
