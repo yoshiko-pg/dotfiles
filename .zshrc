@@ -11,6 +11,9 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 alias ls='/usr/local/bin/gls --color=auto'
 alias diff='colordiff -u'
 
+# IP
+alias -g ip= 'ifconfig | grep "inet "'
+
 # ヒストリの設定
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
@@ -55,6 +58,16 @@ ERROR=$'\U1F363 '	# スシ
 PROMPT=$'
 %F{yellow}[%~]%f `vcs_echo`
 %(?.${DEFAULT}.${ERROR}) '
+
+# memo
+function memo(){
+  memotxt=''
+  for str in $@
+  do
+  memotxt="${memotxt} ${str}"
+  done
+}
+RPROMPT='${memotxt}'
 
 # もしかして
 SPROMPT="%{$fg[blue]%}もしかして: %B%r%b ${reset_color}  (y, n, a, e)-> "
@@ -165,9 +178,10 @@ alias mv='mv -i'
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 function git(){hub "$@"}
 alias g='git'
+alias gg='git grep'
 alias gits='git status'
 alias gitrmall='git rm $(git ls-files --deleted)'
-alias gh='git gh'
+alias gth='git gh'
 alias gpr='git pull-request'
 for n in $(seq 50); do
   alias gitrb$n="git rebase -i HEAD~$n"
@@ -214,7 +228,9 @@ alias d='cd ~/Dropbox;'
 alias dt='cd ~/Desktop;'
 alias site='cd ~/Dropbox/site/;'
 alias sand='cd ~/local/sandbox/;'
+alias s='cd ~/local/sandbox/;'
 alias gh='cd ~/Dropbox/site/github/;'
+alias diary='cd ~/Dropbox/site/github/diary/;'
 alias blog='cd ~/Dropbox/other/blog/;'
 alias book='cd ~/Dropbox/work/html-css-book/;'
 alias pj='cd ~/Company/project;'
@@ -282,6 +298,9 @@ export _JAVA_OPTIONS='-Dfile.encoding=UTF-8'
 export PATH=/usr/local/php5/bin:$PATH
 alias php=/usr/local/php5/bin/php
 export PATH="/Users/maasa/.composer/vendor/bin:$PATH"
+
+# nodebrew
+export PATH="$HOME/.nodebrew/current/bin:$PATH"
 
 # review
 export PATH="/usr/local/review/bin:$PATH"

@@ -230,11 +230,7 @@ nnoremap [Tag]d :windo diffthis<CR>
 "-------------------------------------------------------------------------------"
 " markdown
 autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-imap <Nul> <Esc><S-a><Space><Space><Esc>o
-nmap <Nul> <S-a><Space><Space><Esc>
-imap <C-Space> <S-Space><S-Space><CR>
-nmap <C-Space> <S-a><Space><Space><Esc>
-
+inoremap <C-n> <Esc><S-a><Space><Space><Esc>o
 
 "-------------------------------------------------------------------------------"
 " template
@@ -336,6 +332,8 @@ NeoBundle 'marijnh/tern_for_vim', {
   \   'others': 'npm install'
   \}}
 NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'othree/yajs.vim'
+NeoBundle 'isRuslan/vim-es6'
 
 " markdown
 NeoBundle 'kannokanno/previm'
