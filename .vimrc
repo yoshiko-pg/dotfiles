@@ -145,7 +145,7 @@ vnoremap v $h
 
 " .vimrcを開く
 nnoremap <Space>.  :edit $MYVIMRC<CR>
-" source ~/.vimrc を実行する。
+" source ~/.vimrc を実行する
 nnoremap <Space>,  :source $MYVIMRC<CR>
 
 " help
@@ -249,8 +249,9 @@ filetype plugin indent off
 if has('vim_starting')
  set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
-call neobundle#rc(expand('~/.vim/bundle/'))
-NeoBundle 'Shougo/neobundle.vim'
+
+call neobundle#begin(expand('~/.vim/bundle/'))
+NeoBundleFetch 'Shougo/neobundle.vim'
 
 " カラースキーム、見た目
 NeoBundle 'jonathanfilip/vim-lucius'
@@ -261,18 +262,19 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimproc.vim', {
-	\ 'build' : {
-		\     'windows' : 'make -f make_mingw32.mak',
-		\     'cygwin' : 'make -f make_cygwin.mak',
-		\     'mac' : 'make -f make_mac.mak',
-		\     'unix' : 'make -f make_unix.mak',
-	\    },
+\ 'build' : {
+\     'windows' : 'tools\\update-dll-mingw',
+\     'cygwin' : 'make -f make_cygwin.mak',
+\     'mac' : 'make',
+\     'linux' : 'make',
+\     'unix' : 'gmake',
+\    },
 \ }
 NeoBundle 'Shougo/vimshell.vim'
 
 " 補完、入力
 NeoBundleLazy 'kana/vim-smartchr', '', 'loadInsert'
-NeoBundleLazy 'kana/vim-smartinput', '', 'loadInsert'
+NeoBundle 'kana/vim-smartinput'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
@@ -280,12 +282,12 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-textobj-indent'
-NeoBundle 'cohama/vim-smartinput-endwise'
-NeoBundle 'vim-scripts/closetag.vim'
+" NeoBundle 'vim-scripts/closetag.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'thinca/vim-qfreplace'
+NeoBundle 'AndrewRadev/inline_edit.vim'
 
 " その他拡張
 NeoBundle 'kana/vim-submode'
@@ -295,13 +297,11 @@ NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'AtsushiM/search-parent.vim'
 NeoBundle 'mattn/benchvimrc-vim'
 NeoBundle 'haya14busa/incsearch.vim'
-NeoBundle 'vim-scripts/renamer.vim'
+NeoBundle 'januswel/rlhelp.vim'
 
 " git
 NeoBundle 'tpope/vim-fugitive'
-
-"db
-NeoBundle 'vim-scripts/dbext.vim'
+NeoBundle 'rhysd/committia.vim'
 
 " Ruby / Rails系
 NeoBundle 'tpope/vim-rails'
@@ -324,7 +324,9 @@ NeoBundle 'groenewege/vim-less'
 NeoBundle 'csscomb/vim-csscomb'
 
 " javascript系
-NeoBundle 'jelera/vim-javascript-syntax'
+NeoBundle "pangloss/vim-javascript"
+NeoBundle "mxw/vim-jsx"
+"NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'jiangmiao/simple-javascript-indenter'
 NeoBundle 'nono/jquery.vim'
 NeoBundle 'marijnh/tern_for_vim', {
@@ -337,6 +339,7 @@ NeoBundle 'isRuslan/vim-es6'
 
 " markdown
 NeoBundle 'kannokanno/previm'
+NeoBundle 'dhruvasagar/vim-table-mode'
 
 " その他言語
 NeoBundle 'moro/vim-review'
@@ -352,6 +355,7 @@ NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'basyura/bitly.vim'
 NeoBundle 'Shougo/unite.vim'
 
+call neobundle#end()
 filetype plugin indent on
 
 
@@ -418,7 +422,9 @@ let g:quickrun_config['markdown'] = {
       \ }
 
 " airline
-"let g:airline_section_a = airline#section#create(['mode'])
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#tab_nr_type = 1
@@ -426,8 +432,8 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:Powerline_symbols = 'fancy'
 let g:airline_left_sep = '⮀'
 let g:airline_right_sep = '⮂'
-let g:airline_linecolumn_prefix = '⭡'
-let g:airline_branch_prefix = '⭠'
+let g:airline_symbols.linenr = '⭡'
+let g:airline_symbols.branch = '⭠'
 let g:airline#extensions#tabline#left_sep = '⮀'
 let g:airline#extensions#tabline#left_alt_sep = '⮂'
 let g:airline#extensions#readonly#symbol = '⭤ '
@@ -659,9 +665,6 @@ call smartinput#define_rule({
             \   'input' : '<CR><Esc><S-o>',
             \   })
 
-" end自動挿入
-call smartinput_endwise#define_default_rules()
-
 " coffee |) で改行したら->を自動で入れる
 call smartinput#map_to_trigger('i', '<CR>', '<CR>', '<CR>')
 call smartinput#define_rule({
@@ -726,7 +729,7 @@ let g:syntastic_loc_list_height=6 "エラー表示ウィンドウの高さ
 set statusline+=%#warningmsg# "エラーメッセージの書式
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_mode_map = {
       \ 'mode': 'active',
       \ 'active_filetypes': ['ruby', 'javascript'],
