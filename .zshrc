@@ -19,13 +19,14 @@ ulimit -n 2048
 
 # プロンプト
 autoload -Uz vcs_info
+setopt prompt_subst
 zstyle ':vcs_info:*' enable git svn
 zstyle ':vcs_info:git:*:-all-' command /usr/bin/git
 zstyle ':vcs_info:*' max-exports 6 # formatに入る変数の最大数
 zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git:*' formats '%b@%r' '%c' '%u'
 zstyle ':vcs_info:git:*' actionformats '%b@%r|%a' '%c' '%u'
-setopt prompt_subst
+precmd(){ vcs_info  }
 function vcs_echo {
 	local st branch color
 	STY= LANG=en_US.UTF-8 vcs_info
@@ -39,6 +40,8 @@ function vcs_echo {
 	fi
 	echo "%{$color%}(%{$branch%})%{$reset_color%}" | sed -e s/@/"%F{yellow}@%f%{$color%}"/
 }
+
+
 
 DEFAULT='$'
 ERROR='%F{red}$%f'
@@ -292,6 +295,7 @@ export PATH=/usr/local/php5/bin:$PATH
 
 # nodebrew
 export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH=$HOME/.nodebrew/current/bin/node:$PATH
 
 # Prott
 export PATH=/Users/yoshiko/workspace/tools/prott-commands/bin:$PATH
