@@ -9,3 +9,4 @@ rules:
   require-jsdoc: 0
   func-style: 0 # [2,  "expression"]
   no-use-before-define: [2, "nofunc"]
+  no-irregular-whitespace: 0
