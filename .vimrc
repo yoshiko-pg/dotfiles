@@ -1,20 +1,23 @@
-" viとの互換をオフ
-set nocompatible
+set encoding=utf-8
+scriptencoding utf-8
+
+augroup vimrc
+  autocmd!
+augroup END
 
 " バックアップ作成
 set backup
-set backupdir=$HOME/\.vim_backup
+set backupdir=$HOME/.vim_backup
 set writebackup  " 上書き前にバックアップ作成
-set undodir=$HOME/\.vim_backup
+set undodir=$HOME/.vim_backup
 
 " バッファ
 set hidden " バッファを保存しなくても他のバッファを表示できるようにする
 set confirm " バッファが変更されているとき、エラーにせず保存するか確認を求める
 
 " スワップファイルを作成する
-set noswapfile
-"set swapfile
-"set directory=$HOME/\.vim_backup
+set swapfile
+set directory=$HOME/.vim_backup
 
 " タイムアウト
 set notimeout ttimeout ttimeoutlen=200 " キーコードはすぐtimeout、マッピングはtimeoutしない
@@ -29,13 +32,11 @@ set tabstop=2  " 画面上のTab幅
 set shiftround " インデントをshiftwidthの幅に丸める
 
 " エンコーディング関連
-set encoding=utf-8     " vim内部で通常使用する文字エンコーディングを設定
-set charconvert=utf-8    " 文字エンコーディングに使われるexpressionを定める
 set fileencoding=utf-8    " バッファのファイルエンコーディングを指定
-set fileencodings=utf-8,euc-jp,sjis " 既存ファイルを開く際の文字コード自動判別
+set fileencodings=utf-8,euc-jp,cp932 " 既存ファイルを開く際の文字コード自動判別
 
 "日本語設定
-au BufNewFile,BufRead * set iminsert=0 "日本語入力をリセット
+autocmd vimrc BufNewFile,BufRead * set iminsert=0 "日本語入力をリセット
 set imsearch=0
 
 " 特殊文字表示設定
@@ -69,11 +70,10 @@ set ruler    " カーソルの現在地表示
 set showmatch   " 括弧強調
 set wrap    " はみ出しの折り返し
 set textwidth=0 " 入力されているテキストの最大幅を無視
-set formatoptions=q " 勝手に改行させない
 syntax on   " 強調表示有効
 colorscheme lucius
 highlight Folded cterm=bold,underline ctermfg=4
-set guifont=Ricty_for_Powerline:h13
+set guifont=Ricty_for_Powerline:h14
 set showcmd "タイプ途中のコマンドを画面最下行に表示
 set scrolloff=5 " スクロールする時に下が見えるようにする
 
@@ -89,13 +89,14 @@ set visualbell t_vb=
 
 " クリップボード
 if has('unnamedplus')
-	set clipboard& clipboard+=unnamedplus
+  set clipboard& clipboard+=unnamedplus
 else
-	set clipboard& clipboard+=unnamed,autoselect
+  set clipboard& clipboard+=unnamed,autoselect
 endif
 
 "コメントアウト
-autocmd FileType * setlocal formatoptions-=ro
+autocmd vimrc FileType * setlocal formatoptions-=o
+autocmd vimrc FileType * setlocal formatoptions-=r
 
 " 差分
 set diffopt=filler,iwhite
@@ -116,7 +117,7 @@ set diffopt=filler,iwhite
 "-------------------------------------------------------------------------------"
 
 " w!! でスーパーユーザーとして保存（sudoが使える環境限定）
-cmap w!! w !sudo tee > /dev/null %
+cnoremap w!! w !sudo tee > /dev/null %
 
 " /{pattern}の入力中は「/」をタイプすると自動で「\/」が、
 " ?{pattern}の入力中は「?」をタイプすると自動で「\?」が 入力されるようになる
@@ -144,9 +145,9 @@ inoremap <C-d> <Delete>
 vnoremap v $h
 
 " .vimrcを開く
-nnoremap <Space>.  :edit $MYVIMRC<CR>
+nnoremap <Space>.  :<C-u>edit $MYVIMRC<CR>
 " source ~/.vimrc を実行する
-nnoremap <Space>,  :source $MYVIMRC<CR>
+nnoremap <Space>,  :<C-u>source $MYVIMRC<CR>
 
 " help
 " nnoremap <C-h> :<C-u>h<Space>
@@ -160,25 +161,15 @@ nnoremap [Tag] <Nop>
 nmap     <Tab> [Tag]
 
 " tabn 新しいタブを作る
-map <silent> [Tag]n :tabnew<CR>
+map <silent> [Tag]n :<C-u>tabnew<CR>
 " tabc タブを閉じる
-map <silent> [Tag]c :tabclose<CR>
+map <silent> [Tag]c :<C-u>tabclose<CR>
 " tabl 次のタブ
-map <silent> [Tag]l :tabnext<CR>
-map <silent> [Tag]<Right> :tabnext<CR>
+map <silent> [Tag]l :<C-u>tabnext<CR>
+map <silent> [Tag]<Right> :<C-u>tabnext<CR>
 " tabh 前のタブ
-map <silent> [Tag]h :tabprevious<CR>
-map <silent> [Tag]<Left> :tabprevious<CR>
-
-"カレントウィンドウを新規タブで開き直す
-if v:version >= 700
-    nnoremap [Tag]t :call OpenNewTab()<CR>
-    function! OpenNewTab()
-        let f = expand("%:p")
-        execute ":q"
-        execute ":tabnew ".f
-    endfunction
-endif
+map <silent> [Tag]h :<C-u>tabprevious<CR>
+map <silent> [Tag]<Left> :<C-u>tabprevious<CR>
 
 " 進む、戻る
 nnoremap [Tag]i <C-i>
@@ -188,10 +179,10 @@ nnoremap [Tag]o <C-o>
 nmap <C-l> <Plug>(openbrowser-open)
 
 " Reset Highlight
-nnoremap <Esc><Esc> :noh<CR>
+nnoremap <Esc><Esc> :<C-u>noh<CR>
 
 " 開いたファイルのディレクトリに移動
-au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
+" autocmd vimrc BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " <Space>:で文末に;
 nnoremap <Space>: A;<Esc>
@@ -216,28 +207,25 @@ inoremap <C-v> <Esc>p<S-a>
 inoremap , ,<Space>
 
 " :cnext
-nnoremap cn :cn<CR>
-
-" 新しいバッファ
-nnoremap [Tag]v :vsplit + enew<CR>
+nnoremap cn :<C-u>cn<CR>
 
 " バッファ同士での差分
-nnoremap [Tag]d :windo diffthis<CR>
+nnoremap [Tag]d :<C-u>windo diffthis<CR>
 
 
 "-------------------------------------------------------------------------------"
 " language
 "-------------------------------------------------------------------------------"
 " markdown
-autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+autocmd vimrc BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 inoremap <C-n> <Esc><S-a><Space><Space><Esc>o
 
 "-------------------------------------------------------------------------------"
 " template
 "-------------------------------------------------------------------------------"
-autocmd BufNewFile *.html 0r ~/.vim/templates/template.html
-autocmd BufNewFile *.php 0r ~/.vim/templates/template.php
-autocmd BufNewFile gulpfile.js 0r ~/.vim/templates/gulpfile.js
+autocmd vimrc BufNewFile *.html 0r ~/.vim/templates/template.html
+autocmd vimrc BufNewFile *.php 0r ~/.vim/templates/template.php
+autocmd vimrc BufNewFile gulpfile.js 0r ~/.vim/templates/gulpfile.js
 
 
 "-------------------------------------------------------------------------------"
@@ -405,9 +393,9 @@ endif
 
 " vimproc
 if has('mac')
-  let g:vimproc_dll_path = $VIMRUNTIME . '/autoload/vimproc_mac.so'
+  let g:vimproc#dll_path = $VIMRUNTIME . '/autoload/vimproc_mac.so'
 elseif has('win64')
-  let g:vimproc_dll_path = $VIMRUNTIME . '/autoload/vimproc_win64.dll'
+  let g:vimproc#dll_path = $VIMRUNTIME . '/autoload/vimproc_win64.dll'
 endif
 
 " emmet
@@ -440,7 +428,7 @@ let g:airline#extensions#readonly#symbol = '⭤ '
 
 " GoshREPL
 let g:neocomplete#keyword_patterns = {}
-let g:neocomplete#keyword_patterns['gosh-repl'] = "[[:alpha:]+*/@$_=.!?-][[:alnum:]+*/@$_:=.!?-]*"
+let g:neocomplete#keyword_patterns['gosh-repl'] = '[[:alpha:]+*/@$_=.!?-][[:alnum:]+*/@$_:=.!?-]*'
 vmap <CR> <Plug>(gosh_repl_send_block)
 
 " vim-submode
@@ -484,15 +472,15 @@ nnoremap <silent> [unite]ras :<C-u>Unite<Space>rails/stylesheet<CR>
 " VimFiler
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_safe_mode_by_default = 0
-nnoremap <Space>o :VimFilerBufferDir<CR>
-nnoremap <Space>f :VimFiler -split -simple -winwidth=35 -no-quit<CR>
+nnoremap <Space>o :<C-u>VimFilerBufferDir<CR>
+nnoremap <Space>f :<C-u>VimFiler -split -simple -winwidth=35 -no-quit<CR>
 
 " Previm
 let g:previm_open_cmd = ''
 nnoremap [previm] <Nop>
 nmap <Space>p [previm]
 nnoremap <silent> [previm]o :<C-u>PrevimOpen<CR>
-nnoremap <silent> [previm]r :call previm#refresh()<CR>
+nnoremap <silent> [previm]r :<C-u>call previm#refresh()<CR>
 
 "sass
 let g:sass_compile_cdloop = 5 " 編集したファイルから遡るフォルダの最大数
@@ -718,7 +706,7 @@ let g:SimpleJsIndenter_BriefMode = 2
 let g:SimpleJsIndenter_CaseIndentLevel = -1
 
 " Syntax file for jQuery
-au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
+autocmd vimrc BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 
 " Syntastic
 nnoremap <Space>c :<C-u>SyntasticCheck<CR>
@@ -754,14 +742,14 @@ nnoremap [fugitive]ds  :<C-u>Gsdiff<CR>
 nnoremap [fugitive]l  :<C-u>Glog<CR>
 nnoremap [fugitive]m  :<C-u>Gmove<Space>
 nnoremap [fugitive]r  :<C-u>Gremove<CR>
-nnoremap [fugitive]g  :<C-u>Ggrep 
+nnoremap [fugitive]g  :<C-u>Ggrep<Space>
 nnoremap [fugitive]b  :<C-u>Gblame w<CR>
 
 " matchit
-runtime macros/matchit.vim
+runtime tmhedberg/matchit
 
 " closetag.vim
-:let g:closetag_html_style=1
+let g:closetag_html_style=1
 
 " TweetVim
 nnoremap [tweetvim] <Nop>
@@ -770,7 +758,7 @@ nnoremap <silent> [tweetvim]h :<C-u>TweetVimHomeTimeline<CR>
 nnoremap <silent> [tweetvim]m :<C-u>TweetVimMentions<CR>
 nnoremap <silent> [tweetvim]t :<C-u>TweetVimSay<CR>
 nnoremap <silent> [tweetvim]c :<C-u>TweetVimCurrentLineSay<CR>
-nnoremap <silent> [tweetvim]s :<C-u>TweetVimSearch 
+nnoremap <silent> [tweetvim]s :<C-u>TweetVimSearch<Space>
 
 " caw.vim (コメントアウト)
 nmap <Leader>c <Plug>(caw:i:toggle)
@@ -780,3 +768,6 @@ vmap <Leader>c <Plug>(caw:i:toggle)
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
+
+" vim-table-mode
+let g:table_mode_corner='|'
