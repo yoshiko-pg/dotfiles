@@ -234,9 +234,6 @@ alias blog='cd ~/Dropbox/other/blog/;'
 alias book='cd ~/Dropbox/work/html-css-book/;'
 alias pj='cd ~/Company/project;'
 
-# 現在のディレクトリで新しいタブ
-alias t='~/Dropbox/app/script/createTabAtCurrentDir.applescript'
-
 # テンプレートからrails new
 alias rnew='rails new$1 -m https://github.com/yoshiko-pg/rails_slim_template/raw/master/rails_slim_template.rb'
 alias rnewslim='rails new$1 -m https://github.com/yoshiko-pg/rails_slim_template/raw/master/rails_slim_mini.rb'
