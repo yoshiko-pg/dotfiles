@@ -181,7 +181,7 @@ alias g='git'
 alias gg='git grep'
 alias gits='git status'
 alias gitrmall='git rm $(git ls-files --deleted)'
-alias gh='git gh'
+alias gh='git browse'
 alias gpr='git pull-request'
 for n in $(seq 50); do
   alias gitrb$n="git rebase -i HEAD~$n"
