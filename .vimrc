@@ -348,7 +348,7 @@ filetype plugin indent on
 
 
 " neocompleteを起動時に有効化する
-"let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_at_startup = 1
 
 " 大文字を区切りとしたワイルドカードのように振る舞う機能
 let g:neocomplete#enable_camel_case_completion = 1
@@ -534,11 +534,11 @@ call smartinput#define_rule({
 
 call smartinput#map_to_trigger('i', '<CR>', '<CR>', '<CR>')
 " 行末のスペースを削除する
-call smartinput#define_rule({
-            \   'at'    : ' \%#',
-            \   'char'  : '<CR>',
-            \   'input' : "<Esc>:call setline('.', substitute(getline('.'), '\\s\\+$', '', '')) <CR><S-a><CR>",
-            \   })
+" call smartinput#define_rule({
+"             \   'at'    : ' \%#',
+"             \   'char'  : '<CR>',
+"             \   'input' : \"<Esc>:call setline('.', substitute(getline('.'), '\\s\\+$', '', '')) <CR><S-a><CR>",
+"             \   })
 
 " Ruby 文字列内変数埋め込み
 call smartinput#map_to_trigger('i', '#', '#', '#')
@@ -646,6 +646,11 @@ call smartinput#define_rule({
             \   'char'  : '<CR>',
             \   'input' : '<CR><Esc><S-o>',
             \   })
+call smartinput#define_rule({
+            \   'at'    : '{ \%# }',
+            \   'char'  : '<CR>',
+            \   'input' : '<BS><CR><Esc><S-o>',
+            \   })
 " <tag></tag>の展開
 call smartinput#define_rule({
             \   'at'    : '>\%#<\/',
@@ -694,6 +699,11 @@ call smartinput#define_rule({
             \   'at' : 'fn\%#',
             \   'char' : '<CR>',
             \   'input' : '<BS>unction<Space>()<Space>{<CR>}<Esc>O'
+            \    })
+call smartinput#define_rule({
+            \   'at' : 'cl\%#',
+            \   'char' : '<CR>',
+            \   'input' : '<BS>onsole.log();<Esc>hi'
             \    })
 call smartinput#define_rule({
             \   'at' : '=\%#',
