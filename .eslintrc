@@ -10,3 +10,4 @@ rules:
   func-style: 0 # [2,  "expression"]
   no-use-before-define: [2, "nofunc"]
   no-irregular-whitespace: 0
+  strict: [2, "function"]
