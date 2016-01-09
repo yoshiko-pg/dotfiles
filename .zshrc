@@ -296,6 +296,7 @@ export PATH=/usr/local/php5/bin:$PATH
 # nodebrew
 export PATH=$HOME/.nodebrew/current/bin:$PATH
 export PATH=$HOME/.nodebrew/current/bin/node:$PATH
+export PATH=$HOME/.nodebrew/current/bin/grunt:$PATH
 
 # Prott
 export PATH=/Users/yoshiko/workspace/tools/prott-commands/bin:$PATH
