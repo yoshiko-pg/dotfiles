@@ -217,9 +217,6 @@ alias bu='bundle update'
 alias bug='bundle upgrade'
 alias be='bundle exec'
 
-# gulp
-alias cgulp='gulp --require coffee-script'
-
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
 
@@ -229,10 +226,6 @@ alias gth='cd ~/github;'
 alias sand='cd ~/local/sandbox/;'
 alias s='cd ~/local/sandbox/;'
 alias pj='cd ~/Company/project;'
-
-# テンプレートからrails new
-alias rnew='rails new$1 -m https://github.com/yoshiko-pg/rails_slim_template/raw/master/rails_slim_template.rb'
-alias rnewslim='rails new$1 -m https://github.com/yoshiko-pg/rails_slim_template/raw/master/rails_slim_mini.rb'
 
 # グローバルエイリアス
 alias -g L='| less'
@@ -259,9 +252,6 @@ export PATH="/Applications/MacVim.app/Contents/MacOS:$PATH"
 alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
 alias vi=vim
 
-# rbenv
-eval "$(rbenv init - zsh)"
-
 # zaw.zsh
 function mkcd(){mkdir -p $1 && cd $1}
 source /Users/maasa/zsh_plugin/zaw/zaw.zsh
@@ -272,33 +262,6 @@ PATH="/Applications/Postgres.app/Contents/Versions/9.3/bin:$PATH"
 
 # rails
 export RAILS_ENV=development
-
-# Android
-export PATH="/Applications/eclipse/sdk/tools:$PATH"
-export PATH="/Applications/eclipse/sdk/platform-tools:$PATH"
-#export ANDROID_HOME="/Applications/eclipse/sdk"
-#export JAVA_HOME="/usr/libexec/java_home"
-#export JAVA_HOME="/Library/Java/Home"
-#export PATH="$JAVA_HOME/bin:$PATH"
-export _JAVA_OPTIONS='-Dfile.encoding=UTF-8'
-
-# phpenv
-# export PATH=$PATH:$HOME/.phpenv/bin
-# eval "$(phpenv init - zsh)"
-
-# php5
-export PATH=/usr/local/php5/bin:$PATH
-alias php=/usr/local/php5/bin/php
-export PATH="/Users/maasa/.composer/vendor/bin:$PATH"
-
-# nodebrew
-export PATH="$HOME/.nodebrew/current/bin:$PATH"
-export PATH=$PATH:./node_modules/.bin
-
-# review
-export PATH="/usr/local/review/bin:$PATH"
-export PATH="/Users/maasa/.rbenv/versions/2.1.1/bin:$PATH"
-
 
 # tmux
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
