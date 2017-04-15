@@ -47,6 +47,7 @@ set listchars=tab:»-,trail:-,extends:»,precedes:«,nbsp:%,eol:↲
 set backspace=indent,eol,start     " Backspaceの動作
 set whichwrap=b,s,h,l,<,>,[,] " カーソルを行頭、行末で止まらないようにする
 set wildmenu      " コマンドの補完候補を表示
+set wildmode=longest,full
 "set helplang=ja,en    " ヘルプ検索で日本語を優先
 
 " 検索設定
@@ -100,6 +101,9 @@ autocmd vimrc FileType * setlocal formatoptions-=r
 
 " 差分
 set diffopt=filler,iwhite
+
+" 開いているファイルのディレクトリに自動で移動
+" set autochdir "vimfilerが使えない
 
 " -で単語分割しない
 " set isk+=-
@@ -204,7 +208,7 @@ inoremap [D <Left>
 inoremap <C-v> <Esc>p<S-a>
 
 " ,の後ろにスペース
-inoremap , ,<Space>
+" inoremap , ,<Space>
 
 " :cnext
 nnoremap cn :<C-u>cn<CR>
@@ -259,6 +263,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 \    },
 \ }
 NeoBundle 'Shougo/vimshell.vim'
+NeoBundle 'moll/vim-node'
 
 " 補完、入力
 NeoBundleLazy 'kana/vim-smartchr', '', 'loadInsert'
@@ -276,6 +281,7 @@ NeoBundle 'tyru/caw.vim'
 NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'AndrewRadev/inline_edit.vim'
+NeoBundle 'elzr/vim-json'
 
 " その他拡張
 NeoBundle 'kana/vim-submode'
@@ -324,6 +330,19 @@ NeoBundle 'marijnh/tern_for_vim', {
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'othree/yajs.vim'
 NeoBundle 'isRuslan/vim-es6'
+NeoBundleLazy 'leafgarland/typescript-vim', {
+\ 'autoload' : {
+\   'filetypes' : ['typescript'] }
+\}
+NeoBundleLazy 'jason0x43/vim-js-indent', {
+\ 'autoload' : {
+\   'filetypes' : ['javascript', 'typescript', 'html'],
+\}}
+NeoBundleLazy 'clausreinke/typescript-tools.vim', {
+\ 'build' : 'npm install -g',
+\ 'autoload' : {
+\   'filetypes' : ['typescript'] }
+\}
 
 " markdown
 NeoBundle 'kannokanno/previm'
@@ -534,11 +553,11 @@ call smartinput#define_rule({
 
 call smartinput#map_to_trigger('i', '<CR>', '<CR>', '<CR>')
 " 行末のスペースを削除する
-" call smartinput#define_rule({
-"             \   'at'    : ' \%#',
-"             \   'char'  : '<CR>',
-"             \   'input' : \"<Esc>:call setline('.', substitute(getline('.'), '\\s\\+$', '', '')) <CR><S-a><CR>",
-"             \   })
+call smartinput#define_rule({
+            \   'at'    : ' \%#',
+            \   'char'  : '<CR>',
+            \   'input' : "<Esc>:call setline('.', substitute(getline('.'), '\\s\\+$', '', '')) <CR><S-a><CR>",
+            \   })
 
 " Ruby 文字列内変数埋め込み
 call smartinput#map_to_trigger('i', '#', '#', '#')
@@ -651,6 +670,19 @@ call smartinput#define_rule({
             \   'char'  : '<CR>',
             \   'input' : '<BS><CR><Esc><S-o>',
             \   })
+" ``の展開
+call smartinput#map_to_trigger('i', '<CR>', '<CR>', '<CR>')
+call smartinput#define_rule({
+            \   'at'    : '`\%#`',
+            \   'char'  : '<CR>',
+            \   'input' : '<CR><Esc><S-o><Tab>',
+            \   })
+call smartinput#define_rule({
+            \   'at'    : '` \%# `',
+            \   'char'  : '<CR>',
+            \   'input' : '<BS><CR><Esc><S-o>',
+            \   })
+
 " <tag></tag>の展開
 call smartinput#define_rule({
             \   'at'    : '>\%#<\/',
@@ -781,3 +813,11 @@ map g/ <Plug>(incsearch-stay)
 
 " vim-table-mode
 let g:table_mode_corner='|'
+
+" vim-json
+let g:vim_json_syntax_conceal = 0
+
+" typescript
+let g:js_indent_typescript = 1
+
+set completeopt-=preview

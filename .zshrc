@@ -5,7 +5,7 @@ export LANG=ja_JP.UTF-8
 autoload -Uz colors
 colors
 export CLICOLOR=1
-eval $(/usr/local/bin/gdircolors ~/Dropbox/app/Terminal/solarized/dircolors-solarized-master/dircolors.ansi-universal)
+eval $(/usr/local/bin/gdircolors ~/dotfiles/Terminal/solarized/dircolors-solarized-master/dircolors.ansi-universal)
 export LSCOLORS=ExFxBxDxCxegedabagacad
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 alias ls='/usr/local/bin/gls --color=auto'
@@ -224,14 +224,10 @@ alias cgulp='gulp --require coffee-script'
 alias sudo='sudo '
 
 # カスタム移動系
-alias d='cd ~/Dropbox;'
 alias dt='cd ~/Desktop;'
-alias site='cd ~/Dropbox/site/;'
+alias gth='cd ~/github;'
 alias sand='cd ~/local/sandbox/;'
 alias s='cd ~/local/sandbox/;'
-alias diary='cd ~/Dropbox/site/github/diary/;'
-alias blog='cd ~/Dropbox/other/blog/;'
-alias book='cd ~/Dropbox/work/html-css-book/;'
 alias pj='cd ~/Company/project;'
 
 # テンプレートからrails new
@@ -297,6 +293,7 @@ export PATH="/Users/maasa/.composer/vendor/bin:$PATH"
 
 # nodebrew
 export PATH="$HOME/.nodebrew/current/bin:$PATH"
+export PATH=$PATH:./node_modules/.bin
 
 # review
 export PATH="/usr/local/review/bin:$PATH"
