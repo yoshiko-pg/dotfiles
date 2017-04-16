@@ -501,16 +501,6 @@ nmap <Space>p [previm]
 nnoremap <silent> [previm]o :<C-u>PrevimOpen<CR>
 nnoremap <silent> [previm]r :<C-u>call previm#refresh()<CR>
 
-"sass
-let g:sass_compile_cdloop = 5 " 編集したファイルから遡るフォルダの最大数
-let g:sass_compile_auto = 0 " ファイル保存時に自動コンパイル（1で自動実行）
-let g:sass_compile_file = ['scss', 'sass'] " 自動コンパイルを実行する拡張子
-let g:sass_compile_cssdir = ['./', 'css', 'stylesheet'] " cssファイルが入っているディレクトリ名（前のディレクトリほど優先）
-" コンパイル実行前に実行したいコマンドを設定
-let g:sass_compile_beforecmd = "growlnotify -t 'sass-compile.vim' -m 'start sass compile.'"
-" コンパイル実行後に実行したいコマンドを設定
-let g:sass_compile_aftercmd = "growlnotify -t 'sass-compile.vim' -m ${sasscompileresult}"
-
 " smartinput
 " 括弧内のスペース
 call smartinput#map_to_trigger('i', '<Space>', '<Space>', '<Space>')
