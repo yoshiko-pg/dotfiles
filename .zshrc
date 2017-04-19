@@ -248,8 +248,7 @@ elif which putclip >/dev/null 2>&1 ; then
 fi
 
 # macvim
-export PATH="/Applications/MacVim.app/Contents/MacOS:$PATH"
-alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
+alias vim=/usr/local/bin/nvim
 alias vi=vim
 
 # zaw.zsh
