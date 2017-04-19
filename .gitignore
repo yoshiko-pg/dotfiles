@@ -1,11 +1,9 @@
 *
-!.vimrc
 !.zshrc
 !.gitconfig
 !.gitignore_global
 !Brewfile
 !.gitignore
-!.eslintrc
 !.tern-project
 !deploy.sh
 !/Terminal/
