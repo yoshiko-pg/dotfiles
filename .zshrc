@@ -259,6 +259,10 @@ bindkey '^h' zaw-history
 # postgresql
 PATH="/Applications/Postgres.app/Contents/Versions/9.3/bin:$PATH"
 
+# anyenv
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
+
 # rails
 export RAILS_ENV=development
 
