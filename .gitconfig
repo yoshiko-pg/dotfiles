@@ -4,7 +4,7 @@
 	name = maasa
 	email = maasa.giss2@gmail.com
 [core]
-	editor = vim -c \"set fenc=utf-8\"
+	editor = nvim
 	whitespace = cr-at-eol
 	excludesfile = ~/.gitignore_global  # globalな.gitignoreの指定
 [color]
