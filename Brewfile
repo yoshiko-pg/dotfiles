@@ -1,10 +1,9 @@
-update
-upgrade
-
-install zsh
-install tmux
-install reattach-to-user-namespace
-install neovim
-install hub
-install peco
-cask install qlmarkdown
+tap 'neovim/homebrew-neovim'
+brew 'zsh'
+brew 'tmux'
+brew 'reattach-to-user-namespace'
+brew 'neovim'
+brew 'git'
+brew 'hub'
+brew 'peco'
+cask 'qlmarkdown'
