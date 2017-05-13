@@ -265,6 +265,10 @@ function peco-history-selection() {
 zle -N peco-history-selection
 bindkey '^R' peco-history-selection
 
+function pero() {
+  ag "$@" . | peco --exec 'awk -F : '"'"'{print "+" $2 " " $1}'"'"' | xargs -o nvim '
+}
+
 # postgresql
 PATH="/Applications/Postgres.app/Contents/Versions/9.3/bin:$PATH"
 
