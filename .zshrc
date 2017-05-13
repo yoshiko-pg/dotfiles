@@ -5,11 +5,14 @@ export LANG=ja_JP.UTF-8
 autoload -Uz colors
 colors
 export CLICOLOR=1
-eval $(/usr/local/bin/gdircolors ~/dotfiles/Terminal/solarized/dircolors-solarized-master/dircolors.ansi-universal)
+eval $(gdircolors ~/.dircolors)
 export LSCOLORS=ExFxBxDxCxegedabagacad
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 alias ls='/usr/local/bin/gls --color=auto'
 alias diff='colordiff -u'
+if [ -n "$LS_COLORS" ]; then
+    zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+fi
 
 # IP
 alias -g ip= 'ifconfig | grep "inet "'
