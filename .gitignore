@@ -6,5 +6,5 @@
 !.gitignore
 !.tern-project
 !deploy.sh
-!/Terminal/
 !.dircolors
+!.peco.config.json

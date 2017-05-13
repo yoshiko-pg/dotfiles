@@ -254,10 +254,16 @@ fi
 alias vim=/usr/local/bin/nvim
 alias vi=vim
 
-# zaw.zsh
-function mkcd(){mkdir -p $1 && cd $1}
-source /Users/maasa/zsh_plugin/zaw/zaw.zsh
-bindkey '^h' zaw-history
+# peco
+alias peco='peco --rcfile=~/.peco.config.json'
+function peco-history-selection() {
+    BUFFER=`history -n 1 | tail -r  | awk '!a[$0]++' | peco`
+    CURSOR=$#BUFFER
+    zle reset-prompt
+}
+
+zle -N peco-history-selection
+bindkey '^R' peco-history-selection
 
 # postgresql
 PATH="/Applications/Postgres.app/Contents/Versions/9.3/bin:$PATH"
