@@ -253,6 +253,7 @@ fi
 # macvim
 alias vim=/usr/local/bin/nvim
 alias vi=vim
+export XDG_CONFIG_HOME=$HOME/.config
 
 # peco
 alias peco='peco --rcfile=~/.peco.config.json'
@@ -266,7 +267,7 @@ zle -N peco-history-selection
 bindkey '^R' peco-history-selection
 
 function pero() {
-  ag "$@" . | peco --exec 'awk -F : '"'"'{print "+" $2 " " $1}'"'"' | xargs -o nvim '
+  ag -a "$@" . | peco --exec 'awk -F : '"'"'{print "+" $2 " " $1}'"'"' | xargs -o nvim '
 }
 
 # postgresql

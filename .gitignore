@@ -8,3 +8,5 @@
 !deploy.sh
 !.dircolors
 !.peco.config.json
+!.init.vim
+!.dein.toml

@@ -8,4 +8,13 @@ do
   [[ ${f} = ".gitignore" ]] && continue
   ln -snfv ${DOT_DIRECTORY}/${f} ${HOME}/${f}
 done
-echo -e "\e[32mDeploy dotfiles complete!\e[m"
+
+mkdir ${HOME}/.config
+mkdir ${HOME}/.config/nvim
+ln -snfv ${DOT_DIRECTORY}/init.vim  ${HOME}/.config/nvim/init.vim
+ln -snfv ${DOT_DIRECTORY}/dein.toml ${HOME}/.config/nvim/dein.toml
+
+mkdir ${HOME}/.config/nvim/dein
+sh ./installer.sh ${HOME}/.config/nvim/dein
+
+echo "done"
