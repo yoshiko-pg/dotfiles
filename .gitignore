@@ -10,3 +10,4 @@
 !.peco.config.json
 !.init.vim
 !.dein.toml
+!.agignore
