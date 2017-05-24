@@ -267,7 +267,7 @@ zle -N peco-history-selection
 bindkey '^R' peco-history-selection
 
 function pero() {
-  ag --hidden -a "$@" . | peco --exec 'awk -F : '"'"'{print "+" $2 " " $1}'"'"' | xargs -o nvim '
+  ag --hidden "$@" . | peco --exec 'awk -F : '"'"'{print "+" $2 " " $1}'"'"' | xargs -o nvim '
 }
 
 # postgresql
