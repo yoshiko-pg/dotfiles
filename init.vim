@@ -41,16 +41,7 @@ set termguicolors
 " 背景色
 set background=dark
 
-" copy & paste map
-" nnoremap dd "*dd
-" vnoremap dd "*dd
-" nnoremap d "*d
-" vnoremap d "*d
-" nnoremap yy "*yy
-" vnoremap yy "*yy
-" nnoremap y "*y
-" vnoremap y "*y
-" nnoremap p "*p
-" vnoremap p "*p
+" clip board "
+set clipboard+=unnamedplus
 
 syntax enable
