@@ -7,6 +7,7 @@
 	editor = nvim
 	whitespace = cr-at-eol
 	excludesfile = ~/.gitignore_global  # globalな.gitignoreの指定
+	ignorecase = false
 [color]
 	ui = true
 [alias]
@@ -17,10 +18,12 @@
 	a = add
 	c = commit
 	cm = commit -m
-	cam = commit -am
 	co = checkout
-	p = push
 	b = branch
+	bdd = !git branch --merged | grep -v \\* | xargs -I % git branch -d %
+	bff = fetch --prune
+	openpr = "!f() { hub browse -- `git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1 | cut -f5 -d' ' | sed -e 's%#%pull/%'`; }; f"
+	showpr = "!f() { git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1; }; f"
 [push]
 	default = tracking       # defaultのpush先はtrackingしているリポジトリ
 [pager]
@@ -31,3 +34,5 @@
 	tool = vimdiff
 [mergetool]
 	keepBackup = false
+[rerere]
+	enabled = true

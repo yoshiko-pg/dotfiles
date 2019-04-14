@@ -8,7 +8,7 @@ export CLICOLOR=1
 eval $(gdircolors ~/.dircolors)
 export LSCOLORS=ExFxBxDxCxegedabagacad
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-alias ls='/usr/local/bin/gls --color=auto'
+alias ls="$HOME/usr/local/bin/gls --color=auto"
 alias diff='colordiff -u'
 if [ -n "$LS_COLORS" ]; then
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
@@ -86,7 +86,7 @@ zstyle ':zle:*' word-style unspecified
 ########################################
 # 補完
 # zsh-completions
-fpath=(/usr/local/share/zsh-completions $fpath)
+fpath=($HOME/usr/local/share/zsh-completions $fpath)
 
 # 補完機能を有効にする
 autoload -U compinit
@@ -99,7 +99,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' ignore-parents parent pwd ..
 
 # sudo の後ろでコマンド名を補完する
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
+zstyle ':completion:*:sudo:*' command-path $HOME/usr/local/sbin $HOME/usr/local/bin \
                    /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
 
 # ps コマンドのプロセス名補完
@@ -181,7 +181,7 @@ alias mv='mv -i'
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 function git(){hub "$@"}
 alias g='git'
-alias gg='git grep'
+alias gg='git grep -n'
 alias gits='git status'
 alias gitrmall='git rm $(git ls-files --deleted)'
 alias gh='git browse'
@@ -202,8 +202,7 @@ function current_branch() {
   echo ${ref#refs/heads/}
 }
 ggl() {
-  [[ "$#" == 0 ]] && local b="$(current_branch)"
-  git pull origin "${b:=$1}" "${*[2,-1]}"
+  git pull
 }
 ggp() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
@@ -251,7 +250,7 @@ elif which putclip >/dev/null 2>&1 ; then
 fi
 
 # macvim
-alias vim=/usr/local/bin/nvim
+alias vim=$HOME/usr/local/bin/nvim
 alias vi=vim
 export XDG_CONFIG_HOME=$HOME/.config
 
@@ -275,7 +274,7 @@ PATH="/Applications/Postgres.app/Contents/Versions/9.3/bin:$PATH"
 
 # anyenv
 export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init -)"
+eval "$(anyenv init - zsh)"
 
 # rails
 export RAILS_ENV=development
