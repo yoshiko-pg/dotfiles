@@ -8,7 +8,7 @@ export CLICOLOR=1
 eval $(gdircolors ~/.dircolors)
 export LSCOLORS=ExFxBxDxCxegedabagacad
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-alias ls="$HOME/usr/local/bin/gls --color=auto"
+alias ls='/usr/local/bin/gls --color=auto'
 alias diff='colordiff -u'
 if [ -n "$LS_COLORS" ]; then
     zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
@@ -86,7 +86,7 @@ zstyle ':zle:*' word-style unspecified
 ########################################
 # 補完
 # zsh-completions
-fpath=($HOME/usr/local/share/zsh-completions $fpath)
+fpath=(/usr/local/share/zsh-completions $fpath)
 
 # 補完機能を有効にする
 autoload -U compinit
@@ -99,7 +99,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' ignore-parents parent pwd ..
 
 # sudo の後ろでコマンド名を補完する
-zstyle ':completion:*:sudo:*' command-path $HOME/usr/local/sbin $HOME/usr/local/bin \
+zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
                    /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
 
 # ps コマンドのプロセス名補完
@@ -250,8 +250,8 @@ elif which putclip >/dev/null 2>&1 ; then
 fi
 
 # macvim
-alias vim=$HOME/usr/local/bin/nvim
-alias vi=vim
+# alias vim=/usr/local/bin/nvim
+# alias vi=vim
 export XDG_CONFIG_HOME=$HOME/.config
 
 # peco
