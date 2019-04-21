@@ -268,7 +268,6 @@ NeoBundle 'moll/vim-node'
 " 補完、入力
 NeoBundleLazy 'kana/vim-smartchr', '', 'loadInsert'
 NeoBundle 'kana/vim-smartinput'
-NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'tpope/vim-surround'
@@ -310,7 +309,6 @@ NeoBundle 'slim-template/vim-slim'
 NeoBundle 'digitaltoad/vim-jade'
 
 " css系
-NeoBundle 'AtsushiM/sass-compile.vim'
 NeoBundle 'hail2u/vim-css3-syntax'
 NeoBundle 'lilydjwg/colorizer'
 NeoBundle 'wavded/vim-stylus'
@@ -366,25 +364,25 @@ call neobundle#end()
 filetype plugin indent on
 
 
-" neocompleteを起動時に有効化する
-let g:neocomplete#enable_at_startup = 1
+" " neocompleteを起動時に有効化する
+" let g:neocomplete#enable_at_startup = 1
+" 
+" " 大文字を区切りとしたワイルドカードのように振る舞う機能
+" let g:neocomplete#enable_camel_case_completion = 1
+" 
+" " _区切りの補完を有効化
+" let g:neocomplete#enable_underbar_completion = 1
+" 
+" " 大文字が入力されるまで大文字小文字の区別を無視する
+" let g:neocomplete#smart_case = 1
+" 
+" "手動補完時に補完を行う入力数を制御
+" let g:neocomplete#manual_completion_start_length = 0
+" let g:neocomplete#caching_percent_in_statusline = 1
+" let g:neocomplete#enable_skip_completion = 1
+" let g:neocomplete#skip_input_time = '0.5'
 
-" 大文字を区切りとしたワイルドカードのように振る舞う機能
-let g:neocomplete#enable_camel_case_completion = 1
-
-" _区切りの補完を有効化
-let g:neocomplete#enable_underbar_completion = 1
-
-" 大文字が入力されるまで大文字小文字の区別を無視する
-let g:neocomplete#smart_case = 1
-
-"手動補完時に補完を行う入力数を制御
-let g:neocomplete#manual_completion_start_length = 0
-let g:neocomplete#caching_percent_in_statusline = 1
-let g:neocomplete#enable_skip_completion = 1
-let g:neocomplete#skip_input_time = '0.5'
-
-inoremap <expr><CR> neocomplete#smart_close_popup()."\<CR>"
+" inoremap <expr><CR> neocomplete#smart_close_popup()."\<CR>"
 inoremap <expr><TAB> pumvisible()?"\<C-n>":"\<TAB>"
 
 
@@ -446,9 +444,9 @@ let g:airline#extensions#tabline#left_alt_sep = '⮂'
 let g:airline#extensions#readonly#symbol = '⭤ '
 
 " GoshREPL
-let g:neocomplete#keyword_patterns = {}
-let g:neocomplete#keyword_patterns['gosh-repl'] = '[[:alpha:]+*/@$_=.!?-][[:alnum:]+*/@$_:=.!?-]*'
-vmap <CR> <Plug>(gosh_repl_send_block)
+" let g:neocomplete#keyword_patterns = {}
+" let g:neocomplete#keyword_patterns['gosh-repl'] = '[[:alpha:]+*/@$_=.!?-][[:alnum:]+*/@$_:=.!?-]*'
+" vmap <CR> <Plug>(gosh_repl_send_block)
 
 " vim-submode
 call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')

@@ -17,4 +17,7 @@ ln -snfv ${DOT_DIRECTORY}/dein.toml ${HOME}/.config/nvim/dein.toml
 mkdir ${HOME}/.config/nvim/dein
 sh ./installer.sh ${HOME}/.config/nvim/dein
 
+cp -r ./colors ${HOME}/.vim/colors
+ln -snfv ${HOME}/.vim/colors ${HOME}/.config/nvim/colors
+
 echo "done"
