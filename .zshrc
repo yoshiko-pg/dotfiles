@@ -182,13 +182,18 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 function git(){hub "$@"}
 alias g='git'
 alias gg='git grep -n'
+alias ggp='git push origin $(git rev-parse --abbrev-ref HEAD) --no-verify'
+alias ggpf='git push origin $(git rev-parse --abbrev-ref HEAD) --no-verify -f'
+alias ggpr='git push origin $(git rev-parse --abbrev-ref HEAD) --no-verify && git pull-request -p -a yoshiko-pg'
 alias gits='git status'
 alias gitrmall='git rm $(git ls-files --deleted)'
 alias gh='git browse'
 alias gpr='git pull-request'
+alias gomi='git commit -m gomi --no-verify'
 for n in $(seq 50); do
-  alias gitrb$n="git rebase -i HEAD~$n"
+  alias grb$n="git rebase -i HEAD~$n"
 done
+alias git-delete-squashed-stg='git checkout -q stg && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base stg $branch) && [[ $(git cherry stg $(git commit-tree $(git rev-parse $branch\^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done'
 
 : ${_omz_git_git_cmd:=git}
 function current_branch() {
@@ -202,15 +207,7 @@ function current_branch() {
   echo ${ref#refs/heads/}
 }
 ggl() {
-  git pull
-}
-ggp() {
-  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
-    git push origin "${*}"
-  else
-    [[ "$#" == 0 ]] && local b="$(current_branch)"
-    git push origin "${b:=$1}"
-  fi
+  git pull --prune
 }
 
 # bundle
@@ -272,9 +269,19 @@ function pero() {
 # postgresql
 PATH="/Applications/Postgres.app/Contents/Versions/9.3/bin:$PATH"
 
-# anyenv
-export PATH="$HOME/.anyenv/bin:$PATH"
-eval "$(anyenv init - zsh)"
-
 # rails
 export RAILS_ENV=development
+
+# go
+PATH=$PATH:$GOPATH/bin
+
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/yoshiko/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/yoshiko/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/yoshiko/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yoshiko/google-cloud-sdk/completion.zsh.inc'; fi
+
+. /usr/local/opt/asdf/asdf.sh

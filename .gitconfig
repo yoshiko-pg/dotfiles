@@ -1,7 +1,7 @@
 [include]
 	path = .gitconfig.local
 [user]
-	name = maasa
+	name = yoshiko
 	email = maasa.giss2@gmail.com
 [core]
 	editor = nvim
@@ -20,7 +20,6 @@
 	cm = commit -m
 	co = checkout
 	b = branch
-	bdd = !git branch --merged | grep -v \\* | xargs -I % git branch -d %
 	bff = fetch --prune
 	openpr = "!f() { hub browse -- `git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1 | cut -f5 -d' ' | sed -e 's%#%pull/%'`; }; f"
 	showpr = "!f() { git log --merges --oneline --reverse --ancestry-path $1...master | grep 'Merge pull request #' | head -n 1; }; f"
@@ -36,3 +35,5 @@
 	keepBackup = false
 [rerere]
 	enabled = true
+[init]
+	defaultBranch = main
